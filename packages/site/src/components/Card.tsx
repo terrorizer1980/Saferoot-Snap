@@ -4,14 +4,16 @@ import styled from 'styled-components';
 type CardProps = {
   content: {
     title?: string;
+    image?: ReactNode;
     description: ReactNode;
     button?: ReactNode;
   };
   disabled?: boolean;
   fullWidth?: boolean;
+  style?: React.CSSProperties;
 };
 
-const CardWrapper = styled.div<{ fullWidth?: boolean; disabled: boolean }>`
+export const CardWrapper = styled.div<{ fullWidth?: boolean; disabled: boolean }>`
   display: flex;
   flex-direction: column;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : '250px')};
@@ -30,28 +32,34 @@ const CardWrapper = styled.div<{ fullWidth?: boolean; disabled: boolean }>`
     margin-bottom: 1.2rem;
     padding: 1.6rem;
   }
+  align-items: center;
 `;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-size: ${({ theme }) => theme.fontSizes.large};
   margin: 0;
+  text-align: center;
   ${({ theme }) => theme.mediaQueries.small} {
     font-size: ${({ theme }) => theme.fontSizes.text};
   }
 `;
 
-const Description = styled.div`
+export const Description = styled.div`
   margin-top: 2.4rem;
   margin-bottom: 2.4rem;
 `;
 
-export const Card = ({ content, disabled = false, fullWidth }: CardProps) => {
-  const { title, description, button } = content;
+export const Card = ({
+  content,
+  disabled = false,
+  fullWidth,
+  style,
+}: CardProps) => {
+  const { title, description, button, image } = content;
   return (
-    <CardWrapper fullWidth={fullWidth} disabled={disabled}>
-      {title && (
-        <Title>{title}</Title>
-      )}
+    <CardWrapper fullWidth={fullWidth} disabled={disabled} style={style}>
+      {image && image}
+      {title && <Title>{title}</Title>}
       <Description>{description}</Description>
       {button}
     </CardWrapper>

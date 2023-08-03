@@ -17,7 +17,7 @@ export const getThemePreference = () => {
 
   const localStoragePreference = getLocalStorage('theme');
   const systemPreference = darkModeSystem ? 'dark' : 'light';
-  const preference = localStoragePreference ?? systemPreference;
+  const preference = 'light';
 
   if (!localStoragePreference) {
     setLocalStorage('theme', systemPreference);

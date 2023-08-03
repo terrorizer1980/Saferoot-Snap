@@ -1,0 +1,18 @@
+@font-face {
+
+    font-family: 'Stolzl-Bold';
+    src: url('../fonts/Stolzl-Bold.ttf') format('tff');
+    
+    font-family: 'Stolzl-Regular';
+    src: url('../fonts/Stolzl-Regular.ttf') format('tff');
+
+    font-family: 'Stolzl-Light';
+    src: url('../fonts/Stolzl-Light.ttf') format('tff');
+
+    font-family: 'Stolzl-Book';
+    src: url('../fonts/Stolzl-Book.ttf') format('tff');
+
+    font-family: 'Stolzl-Medium';
+    src: url('../fonts/Stolzl-Medium.ttf') format('tff');
+    
+  }

@@ -1,10 +1,6 @@
-import { useContext } from 'react';
-import styled, { useTheme } from 'styled-components';
-import { MetamaskActions, MetaMaskContext } from '../hooks';
-import { connectSnap, getThemePreference, getSnap } from '../utils';
-import { HeaderButtons } from './Buttons';
-import { SnapLogo } from './SnapLogo';
-import { Toggle } from './Toggle';
+import styled from 'styled-components';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAuth } from '../hooks';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -15,20 +11,11 @@ const HeaderWrapper = styled.header`
   border-bottom: 1px solid ${(props) => props.theme.colors.border.default};
 `;
 
-const Title = styled.p`
-  font-size: ${(props) => props.theme.fontSizes.title};
-  font-weight: bold;
-  margin: 0;
-  margin-left: 1.2rem;
-  ${({ theme }) => theme.mediaQueries.small} {
-    display: none;
-  }
-`;
-
 const LogoWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 36px;
 `;
 
 const RightContainer = styled.div`
@@ -37,40 +24,16 @@ const RightContainer = styled.div`
   align-items: center;
 `;
 
-export const Header = ({
-  handleToggleClick,
-}: {
-  handleToggleClick(): void;
-}) => {
-  const theme = useTheme();
-  const [state, dispatch] = useContext(MetaMaskContext);
+export const Header = () => {
+  const { authenticated, signOutHandler } = useAuth();
 
-  const handleConnectClick = async () => {
-    try {
-      await connectSnap();
-      const installedSnap = await getSnap();
-
-      dispatch({
-        type: MetamaskActions.SetInstalled,
-        payload: installedSnap,
-      });
-    } catch (e) {
-      console.error(e);
-      dispatch({ type: MetamaskActions.SetError, payload: e });
-    }
-  };
   return (
     <HeaderWrapper>
       <LogoWrapper>
-        <SnapLogo color={theme.colors.icon.default} size={36} />
-        <Title>template-snap</Title>
+        <img src="/saferoot.png" alt="SafeRoot" height="36" />
       </LogoWrapper>
       <RightContainer>
-        <Toggle
-          onToggle={handleToggleClick}
-          defaultChecked={getThemePreference()}
-        />
-        <HeaderButtons state={state} onConnectClick={handleConnectClick} />
+        <ConnectButton />
       </RightContainer>
     </HeaderWrapper>
   );

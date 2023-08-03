@@ -1,6 +1,6 @@
-import { createGlobalStyle, DefaultTheme } from 'styled-components';
+import { createGlobalStyle, DefaultTheme } from "styled-components";
 
-const breakpoints = ['600px', '768px', '992px'];
+const breakpoints = ["600px", "768px", "992px"];
 
 /**
  * Common theme properties.
@@ -12,16 +12,16 @@ const theme = {
     code: 'ui-monospace,Menlo,Monaco,"Cascadia Mono","Segoe UI Mono","Roboto Mono","Oxygen Mono","Ubuntu Monospace","Source Code Pro","Fira Mono","Droid Sans Mono","Courier New", monospace',
   },
   fontSizes: {
-    heading: '5.2rem',
-    mobileHeading: '3.6rem',
-    title: '2.4rem',
-    large: '2rem',
-    text: '1.6rem',
-    small: '1.4rem',
+    heading: "5.2rem",
+    mobileHeading: "3.6rem",
+    title: "2.4rem",
+    large: "4rem",
+    text: "1.6rem",
+    small: "1.4rem",
   },
   radii: {
-    default: '24px',
-    button: '8px',
+    default: "24px",
+    button: "100px",
   },
   breakpoints,
   mediaQueries: {
@@ -30,8 +30,8 @@ const theme = {
     large: `@media screen and (min-width: ${breakpoints[2]})`,
   },
   shadows: {
-    default: '0px 7px 42px rgba(0, 0, 0, 0.1)',
-    button: '0px 0px 16.1786px rgba(0, 0, 0, 0.15);',
+    default: "0px 7px 42px rgba(0, 0, 0, 0.1)",
+    button: "0px 0px 16.1786px rgba(0, 0, 0, 0.15);",
   },
 };
 
@@ -41,34 +41,34 @@ const theme = {
 export const light: DefaultTheme = {
   colors: {
     background: {
-      default: '#FFFFFF',
-      alternative: '#F2F4F6',
-      inverse: '#141618',
+      default: "#F2F2F2",
+      alternative: "#F2F4F6",
+      inverse: "#141618",
     },
     icon: {
-      default: '#141618',
-      alternative: '#BBC0C5',
+      default: "#141618",
+      alternative: "#BBC0C5",
     },
     text: {
-      default: '#24272A',
-      muted: '#6A737D',
-      alternative: '#535A61',
-      inverse: '#FFFFFF',
+      default: "#24272A",
+      muted: "#6A737D",
+      alternative: "#535A61",
+      inverse: "#FFFFFF",
     },
     border: {
-      default: '#BBC0C5',
+      default: "#BBC0C5",
     },
     primary: {
-      default: '#6F4CFF',
-      inverse: '#FFFFFF',
+      default: "#6F4CFF",
+      inverse: "#FFFFFF",
     },
     card: {
-      default: '#FFFFFF',
+      default: "#FFFFFF",
     },
     error: {
-      default: '#d73a49',
-      alternative: '#b92534',
-      muted: '#d73a4919',
+      default: "#d73a49",
+      alternative: "#b92534",
+      muted: "#d73a4919",
     },
   },
   ...theme,
@@ -80,34 +80,34 @@ export const light: DefaultTheme = {
 export const dark: DefaultTheme = {
   colors: {
     background: {
-      default: '#24272A',
-      alternative: '#141618',
-      inverse: '#FFFFFF',
+      default: "#24272A",
+      alternative: "#141618",
+      inverse: "#FFFFFF",
     },
     icon: {
-      default: '#FFFFFF',
-      alternative: '#BBC0C5',
+      default: "#FFFFFF",
+      alternative: "#BBC0C5",
     },
     text: {
-      default: '#FFFFFF',
-      muted: '#FFFFFF',
-      alternative: '#D6D9DC',
-      inverse: '#24272A',
+      default: "#FFFFFF",
+      muted: "#FFFFFF",
+      alternative: "#D6D9DC",
+      inverse: "#24272A",
     },
     border: {
-      default: '#848C96',
+      default: "#848C96",
     },
     primary: {
-      default: '#6F4CFF',
-      inverse: '#FFFFFF',
+      default: "#27FB6B",
+      inverse: "#FFFFFF",
     },
     card: {
-      default: '#141618',
+      default: "#141618",
     },
     error: {
-      default: '#d73a49',
-      alternative: '#b92534',
-      muted: '#d73a4919',
+      default: "#d73a49",
+      alternative: "#b92534",
+      muted: "#d73a4919",
     },
   },
   ...theme,
@@ -120,6 +120,10 @@ export const dark: DefaultTheme = {
  * @returns Global style React component.
  */
 export const GlobalStyle = createGlobalStyle`
+  .MuiDataGrid-footerContainer {
+    display: none;
+  }
+  
   html {
     /* 62.5% of the base size of 16px = 10px.*/
     font-size: 62.5%;
@@ -160,27 +164,21 @@ export const GlobalStyle = createGlobalStyle`
     border: 1px solid ${(props) => props.theme.colors.background.inverse};
     font-weight: bold;
     padding: 1rem;
-    min-height: 4.2rem;
+
+    max-width: 150px;
+
     cursor: pointer;
     transition: all .2s ease-in-out;
+  }
+  h2 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 110%;
+    /* identical to box height, or 31px */
 
-    &:hover {
-      background-color: transparent;
-      border: 1px solid ${(props) => props.theme.colors.background.inverse};
-      color: ${(props) => props.theme.colors.text.default};
-    }
+    letter-spacing: -0.03em;
 
-    &:disabled,
-    &[disabled] {
-      border: 1px solid ${(props) => props.theme.colors.background.inverse};
-      cursor: not-allowed;
-    }
-
-    &:disabled:hover,
-    &[disabled]:hover {
-      background-color: ${(props) => props.theme.colors.background.inverse};
-      color: ${(props) => props.theme.colors.text.inverse};
-      border: 1px solid ${(props) => props.theme.colors.background.inverse};
-    }
+    color: #191919;
   }
 `;

@@ -1,8 +1,9 @@
-import { createContext, FunctionComponent, ReactNode, useState } from 'react';
-import { ThemeProvider } from 'styled-components';
-import { getThemePreference, setLocalStorage } from './utils';
-import { dark, light } from './config/theme';
-import { MetaMaskProvider } from './hooks';
+import { createContext, FunctionComponent, ReactNode, useState } from "react";
+import { ThemeProvider } from "styled-components";
+import { getThemePreference, setLocalStorage } from "./utils";
+import { light } from "./config/theme";
+import "./rainbowkit/rainbowkit.css";
+import { AuthProvider } from "./hooks"; // Import the AuthProvider
 
 export type RootProps = {
   children: ReactNode;
@@ -11,21 +12,21 @@ export type RootProps = {
 type ToggleTheme = () => void;
 
 export const ToggleThemeContext = createContext<ToggleTheme>(
-  (): void => undefined,
+  (): void => undefined
 );
 
 export const Root: FunctionComponent<RootProps> = ({ children }) => {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
 
   const toggleTheme: ToggleTheme = () => {
-    setLocalStorage('theme', darkTheme ? 'light' : 'dark');
+    setLocalStorage("theme", darkTheme ? "light" : "dark");
     setDarkTheme(!darkTheme);
   };
 
   return (
     <ToggleThemeContext.Provider value={toggleTheme}>
-      <ThemeProvider theme={darkTheme ? dark : light}>
-        <MetaMaskProvider>{children}</MetaMaskProvider>
+      <ThemeProvider theme={light}>
+        <AuthProvider>{children}</AuthProvider>
       </ThemeProvider>
     </ToggleThemeContext.Provider>
   );

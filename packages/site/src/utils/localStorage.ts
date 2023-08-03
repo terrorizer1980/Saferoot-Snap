@@ -5,14 +5,14 @@
  * @returns The value stored at the key provided if the key exists.
  */
 export const getLocalStorage = (key: string) => {
-  const { localStorage: ls } = window;
+    const { localStorage: ls } = window;
 
-  if (ls !== null) {
-    const data = ls.getItem(key);
-    return data;
-  }
+    if (ls !== null) {
+        const data = ls.getItem(key);
+        return data;
+    }
 
-  throw new Error('Local storage is not available.');
+    throw new Error("Local storage is not available.");
 };
 
 /**
@@ -22,12 +22,12 @@ export const getLocalStorage = (key: string) => {
  * @param value - The value to set.
  */
 export const setLocalStorage = (key: string, value: string) => {
-  const { localStorage: ls } = window;
+    const { localStorage: ls } = window;
 
-  if (ls !== null) {
-    ls.setItem(key, value);
-    return;
-  }
+    if (ls !== null) {
+        ls.setItem(key, value);
+        return;
+    }
 
-  throw new Error('Local storage is not available.');
+    throw new Error("Local storage is not available.");
 };
