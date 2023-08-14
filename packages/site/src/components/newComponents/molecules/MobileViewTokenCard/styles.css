@@ -1,0 +1,26 @@
+.mobile_token_card_root_container {
+  width: "100%";
+  padding: 32px;
+  border: solid 1px var(--borderColor);
+  background-color: var(--white);
+  font-family: "Trebuchet MS";
+  margin: 30px 0; 
+}
+.mobile_token_card_info_container {
+  width: 100%
+}
+.mobile_token_card_main_container {
+  display: flex;
+}
+.mobile_token_card_values{
+}
+.mobile_token_card_name_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.mobile_token_card_line{
+  height: 1px;
+  width: 100%;
+  background-color: var(--borderColor);
+}

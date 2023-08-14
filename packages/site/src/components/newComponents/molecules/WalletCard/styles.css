@@ -1,0 +1,27 @@
+/* WalletCard */
+  .wallet_card_root_container {
+    width: "100%";
+    height: 150px;
+    padding: 32px;
+    border-radius: 8px;
+    border: solid 1px var(--borderColor);
+    max-width: 426px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    background-color: var(--white);
+    font-family:'Trebuchet MS';
+  }
+  
+  .wallet_card_coin_amount {
+    padding: 8px 0 4px 0;
+  }
+  .wallet_card_amount {
+    padding: 0 0 20px 0;
+  }
+  
+  /* Asset Card */
+  .asset_card_amounts {
+    display: flex;
+    margin: 10px 0 20px 0;
+  }

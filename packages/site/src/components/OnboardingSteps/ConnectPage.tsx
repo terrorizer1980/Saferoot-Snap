@@ -9,8 +9,10 @@ import { ActionType } from "../../hooks/actions";
 import { AuthContext } from "../../hooks";
 import { SnapsConnectButton } from "../Snaps";
 import { SimpleButton } from "../SimpleButton";
+import { MM_SNAPS_ENABLED } from "../../config/environmentVariable";
 import { HttpStatusCode, NAVIGATION_PATHS } from "../../constants";
 import { navigate } from "gatsby";
+import { Container } from "./styles";
 
 const ConnectWalletImage = styled.img`
   padding-bottom: 80px;
@@ -23,7 +25,7 @@ const ButtonGroupContainer = styled.div`
   align-items: center;
 `;
 
-export const ConnectPage = ({ nextTab }) => {
+export const ConnectPage = () => {
   const { address, isConnected } = useAccount();
   const { dispatch, state } = useData();
   const { error } = state;
@@ -34,7 +36,7 @@ export const ConnectPage = ({ nextTab }) => {
 
   const goToNextTab = () => {
     if (isConnected && authenticated) {
-      nextTab();
+      navigate(NAVIGATION_PATHS.ONBOARDING);
     }
   };
 
@@ -57,7 +59,7 @@ export const ConnectPage = ({ nextTab }) => {
       if (data.length > 0) {
         dispatch({ type: ActionType.SET_DEPLOYED_SAFEROOT_ADDRESS, payload: data[0].contract_address })
       } else {
-        nextTab();
+        navigate(NAVIGATION_PATHS.ONBOARDING);
       }
       if (result.status === HttpStatusCode.Unauthorized) {
         return;
@@ -83,7 +85,7 @@ export const ConnectPage = ({ nextTab }) => {
   }, [isConnected, address, authenticated]);
 
   return (
-    <div>
+    <Container>
       <Card
         content={{
           image: (
@@ -100,7 +102,7 @@ export const ConnectPage = ({ nextTab }) => {
           button: (
             <ButtonGroupContainer>
               {error && <p style={{ color: "red" }}>{error.message}</p>}
-              <SnapsConnectButton />
+              {true && <SnapsConnectButton />}
               <br />
               {!authenticated && <ConnectButton />}
               {isConnected && authenticated && (
@@ -113,8 +115,8 @@ export const ConnectPage = ({ nextTab }) => {
             </ButtonGroupContainer>
           ),
         }}
-        style={{ height: "auto", width: "450px", marginTop: "-5rem" }}
+        style={{ height: "auto", width: "450px" }}
       />
-    </div>
+    </Container>
   );
 };

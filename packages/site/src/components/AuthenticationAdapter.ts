@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 export const AuthenticationAdapter = (onAuthenticated) =>
   createAuthenticationAdapter({
     getNonce: async (): Promise<string> => {
-      console.log(Object.keys(process.env), '😁')
       const response = await fetch(`http://localhost:5433/nonce`, {
         credentials: "include",
       });

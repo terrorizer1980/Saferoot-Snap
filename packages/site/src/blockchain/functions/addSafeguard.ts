@@ -8,8 +8,7 @@ import { BigNumber } from "ethers";
 export interface SafeguardEntry {
   tokenType: TokenType;
   contractAddress: Address;
-  amount: BigNumber;
-  tokenId: BigNumber;
+  tokenId: Number;
 }
 
 /**
@@ -28,7 +27,9 @@ export const addSafeguard = (args: {
     args.saferootAddress,
     SaferootABI,
     "addSafeguard",
-    args.callData
+    [
+      args.callData
+    ]
   );
   return hook;
 };

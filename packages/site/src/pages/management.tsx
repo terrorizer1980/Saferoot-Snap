@@ -10,6 +10,9 @@ import AccountSummaryWidget from '../components/Management/AccountSummaryWidget'
 import { AccountInformationTable } from '../components/Management/AccountInformationTable';
 import { DeleteSafeGuard } from '../components/Management/ModifySafeguard';
 import WalletSwitchErrorPage from '../components/WalletSwitchErrorPage';
+import useAssetGuards from '../hooks/Assets/useAssetGuards';
+import Dashboard from '../components/newComponents/organisms/Dashboard';
+import { useContractInteraction } from '../hooks/ContractInteractions/useContractInteraction';
 
 const ThreeComponentContainer = styled.div`
   display: flex;
@@ -40,22 +43,11 @@ const Management = () => {
       setAuthenticated(true);
     }
   }, []);
+  // useContractInteraction();
   const { setAuthenticated } = useAuth();
 
-
   return (
-    <Container>
-      <WalletSwitchErrorPage />
-      <ThreeComponentContainer>
-        <UserWalletWidget />
-        <HeaderComponentContainer>
-          <AccountSummaryWidget />
-        </HeaderComponentContainer>
-      </ThreeComponentContainer>
-      <br />
-      <AccountInformationTable />
-      <DeleteSafeGuard />
-    </Container >
+    <Dashboard />
   );
 };
 

@@ -1,5 +1,5 @@
 import { OnRpcRequestHandler } from '@metamask/snaps-types';
-import { panel, text } from '@metamask/snaps-ui';
+import { heading, panel, text } from '@metamask/snaps-ui';
 
 /**
  * Handle incoming JSON-RPC requests, sent through `wallet_invokeSnap`.
@@ -13,16 +13,16 @@ import { panel, text } from '@metamask/snaps-ui';
  */
 export const onRpcRequest: OnRpcRequestHandler = ({ origin, request }) => {
   switch (request.method) {
-    case 'hello':
+    case 'deployContract':
       return snap.request({
         method: 'snap_dialog',
         params: {
-          type: 'confirmation',
+          type: 'alert',
           content: panel([
-            text(`Hello, **${origin}**!`),
-            text('This custom confirmation is just for display purposes.'),
+            heading(`Deploy your own contract`),
+            text('When you deploy your Saferoot contract, you have full ownership and control of your assets.'),
             text(
-              'But you can edit the snap source code to make it do something, if you want to!',
+              'The contract can only facilitate asset backup on your behalf and does not hold custody.',
             ),
           ]),
         },

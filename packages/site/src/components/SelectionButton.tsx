@@ -1,4 +1,5 @@
 import { React } from 'react';
+import { SimpleButton } from './SimpleButton';
 
 
 export type SelectionButtonProps = {

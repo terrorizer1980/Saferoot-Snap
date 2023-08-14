@@ -1,0 +1,61 @@
+.tokens_table_root_container {
+  width: "100%";
+  padding: 32px;
+  border-radius: 8px;
+  border: solid 1px var(--borderColor);
+  background-color: var(--white);
+  font-family: "Trebuchet MS";
+  margin: 30px 50px;
+}
+.tokens_table_header_container {
+  margin-bottom:20px;
+}
+.tokens_table_labels_container {
+  display: flex;
+  margin: 10px 0;
+}
+.tokens_table_labels_text_container {
+  min-width: 120px;
+}
+.tokens_table_container {
+}
+
+.tokens_table_text_container {
+}
+.tokens_table_labels_security {
+}
+.tokens_table_labels_status {
+  /* width: 15% */
+  display: flex;
+  align-items: center;
+}
+.tokens_single_line {
+  height: 1px;
+  width: 100%;
+  background-color: var(--borderColor);
+}
+.tokens_single_data_status_container {
+  display: flex;
+  align-items: center;
+  min-width: 120px;
+  /* width: 20%; */
+  flex-wrap: wrap;
+}
+.tokens_single_data_buttons_container {
+  min-width: 120px;
+  /* width: 20%; */
+}
+.tokens_single_data_indiv_button {
+  margin-left: 5px;
+}
+.table-header {
+  /* background-color: #f2f2f2; */
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 50px; /* Adjust the margin value as per your requirement */
+}
+
+@media only screen and (max-width: 900px) {
+  body {
+    background-color: lightblue;
+  }
+}

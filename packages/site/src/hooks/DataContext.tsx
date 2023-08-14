@@ -12,6 +12,7 @@ import { Step } from "../components/Navigation";
 import { Safeguard } from "../components/OnboardingSteps/SafeguardSetup/";
 import { Snap } from "../types";
 import { isFlask, getSnap } from "../utils";
+import { AssetToApprove } from './ContractInteractions/useContractInteraction';
 
 interface DataState {
   backupWallet: string;
@@ -30,6 +31,7 @@ interface DataState {
   assetToEdit: SelectedAssetForSetup;
   assetToModify: SelectedAssetForSetup;
   assetToAdd: boolean
+  assetToApprove?: AssetToApprove[];
   loader: LoaderState;
   isFlask: boolean;
   installedSnap?: Snap;
@@ -47,7 +49,7 @@ const initialState: DataState = {
   userNFTs: [],
   selectedNFTs: [],
   nftSafeguards: [],
-  selectedTab: Page.Connect,
+  selectedTab: Page.UserWallet,
   steps: [
     { step: 1, pageType: Page.Connect, disabled: true, completed: false },
     { step: 2, pageType: Page.UserWallet, disabled: true, completed: false },
@@ -69,6 +71,7 @@ const initialState: DataState = {
   error: undefined,
   loader: { open: false, message: "" },
   assetToAdd: false,
+  assetToApprove: [],
 };
 
 // Define the reducer function
@@ -125,6 +128,8 @@ const reducer = (state: DataState, action: Action) => {
         ...state,
         error: action.payload,
       };
+    case ActionType.SET_ASSET_TO_APPROVE:
+      return { ...state, assetToApprove: action.payload };
     default:
       throw new Error(`Unhandled action type` + action["type"]);
   }

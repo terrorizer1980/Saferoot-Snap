@@ -1,7 +1,17 @@
 [
   {
     "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
     "name": "InvalidContractAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidTokenType",
     "type": "error"
   },
   {
@@ -68,37 +78,11 @@
       {
         "indexed": false,
         "internalType": "bytes32",
-        "name": "safeguard",
-        "type": "bytes32"
-      }
-    ],
-    "name": "ERC1155SafeguardEdited",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
         "name": "key",
         "type": "bytes32"
       }
     ],
     "name": "ERC20SafeguardAdded",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bytes32",
-        "name": "key",
-        "type": "bytes32"
-      }
-    ],
-    "name": "ERC20SafeguardEdited",
     "type": "event"
   },
   {
@@ -119,38 +103,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bytes32",
-        "name": "key",
-        "type": "bytes32"
-      }
-    ],
-    "name": "ERC721SafeguardEdited",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint8",
         "name": "version",
         "type": "uint8"
       }
     ],
     "name": "Initialized",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "bool",
-        "name": "flag",
-        "type": "bool"
-      }
-    ],
-    "name": "RegistryFlagUpdated",
     "type": "event"
   },
   {
@@ -245,25 +203,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "service",
-        "type": "address"
-      }
-    ],
-    "name": "SaferootCreated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "bytes32",
         "name": "key",
@@ -271,9 +210,9 @@
       },
       {
         "indexed": true,
-        "internalType": "enum Saferoot.TokenType",
+        "internalType": "uint256",
         "name": "tokenType",
-        "type": "uint8"
+        "type": "uint256"
       }
     ],
     "name": "TransferSkip",
@@ -323,7 +262,7 @@
       {
         "components": [
           {
-            "internalType": "enum Saferoot.TokenType",
+            "internalType": "uint8",
             "name": "tokenType",
             "type": "uint8"
           },
@@ -334,16 +273,11 @@
           },
           {
             "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "tokenId",
             "type": "uint256"
           }
         ],
-        "internalType": "struct Saferoot.SafeguardEntry[]",
+        "internalType": "struct SafeguardEntry[]",
         "name": "_ercEntries",
         "type": "tuple[]"
       }
@@ -355,38 +289,22 @@
   },
   {
     "inputs": [],
-    "name": "backup",
+    "name": "addresses",
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "user",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "contractRegistry",
-    "outputs": [
+      },
       {
         "internalType": "address",
-        "name": "",
+        "name": "backup",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "currentSafeguardKey",
-    "outputs": [
+      },
       {
-        "internalType": "uint16",
-        "name": "",
-        "type": "uint16"
+        "internalType": "address",
+        "name": "service",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -400,12 +318,12 @@
         "type": "bytes32"
       }
     ],
-    "name": "decodeKeyID",
+    "name": "decodeKeyAddress",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "pure",
@@ -422,60 +340,23 @@
     "name": "decodeKeyTokenType",
     "outputs": [
       {
-        "internalType": "enum Saferoot.TokenType",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint8"
+        "type": "uint256"
       }
     ],
     "stateMutability": "pure",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "disableRegistry",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "bytes32",
-            "name": "key",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint256",
-            "name": "newTokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "newAmount",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Saferoot.SafeguardEditEntry[]",
-        "name": "_ercEditEntries",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "editSafeguard",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_id",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_addr",
+        "type": "address"
       },
       {
-        "internalType": "enum Saferoot.TokenType",
+        "internalType": "uint8",
         "name": "_tokenType",
         "type": "uint8"
       }
@@ -502,42 +383,8 @@
     "name": "erc1155Safeguards",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "contractAddress",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
         "name": "",
-        "type": "bytes32"
-      }
-    ],
-    "name": "erc20Safeguards",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "contractAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
         "type": "uint256"
       }
     ],
@@ -555,13 +402,27 @@
     "name": "erc721Safeguards",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "contractAddress",
-        "type": "address"
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ercSafeguardsExists",
+    "outputs": [
       {
         "internalType": "uint256",
-        "name": "tokenId",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -645,19 +506,54 @@
         "internalType": "address",
         "name": "_backup",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_contractRegistry",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_registryEnabled",
-        "type": "bool"
       }
     ],
     "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_service",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_backup",
+        "type": "address"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "tokenType",
+            "type": "uint8"
+          },
+          {
+            "internalType": "address",
+            "name": "contractAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct SafeguardEntry[]",
+        "name": "_ercEntries",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "initializeAndAddSafeguard",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -672,20 +568,7 @@
     ],
     "name": "initiateSafeguard",
     "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "registryEnabled",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -725,19 +608,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "service",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -770,16 +640,34 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "user",
-    "outputs": [
+    "inputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "_tokenAddress",
         "type": "address"
       }
     ],
-    "stateMutability": "view",
+    "name": "withdrawERC20",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_tokenAddress",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdrawERC721",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   }
 ]

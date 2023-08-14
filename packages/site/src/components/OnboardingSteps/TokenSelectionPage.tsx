@@ -1,51 +1,38 @@
 import React from 'react';
-import { GridRowSelectionModel } from '@mui/x-data-grid';
 import type { } from '@mui/x-data-grid/themeAugmentation';
-import { useData } from "../../hooks/DataContext";
-import { NFTGrid } from './Tables/NFTGrid';
-import { TokenGrid } from './Tables/TokenGrid';
-import { Container, Left, Right } from './styles';
 import FixedNavigationBottomBar from '../FixedNavigationBottomBar';
-import { UserWalletWidget } from '../UserWalletWidget';
 import { NFT_SUPPORT_ENABLED } from '../../config/environmentVariable';
-import { SelectedNFTToken } from './Tables/gridhelper';
-import { ActionType } from '../../hooks/actions';
 import { SimpleButton } from '../SimpleButton';
+import AssetSelection from '../newComponents/organisms/AssetSelection';
 
+export const TokenSelectionPage = ({ nextTab, prevTab, assetGuards, setAssetGuards }) => {
 
-export const TokenSelectionPage = ({ nextTab, prevTab }) => {
-  const { state, dispatch } = useData();
-  const userWallet = state.userWallet;
-  const [userTokenSelection, setUserTokenSelection] =
-    React.useState<GridRowSelectionModel>([]);
-  const [userNFTSelection, setUserNFTSelection] = React.useState<SelectedNFTToken[]>([]);
   const [hasAssetsSelected, setHasAssetsSelected] = React.useState<boolean>(false);
 
   const handleConfirm = () => {
-    dispatch({ type: ActionType.SET_SELECTED_NFTS, payload: userNFTSelection });
-    dispatch({ type: ActionType.SET_SELECTED_TOKENS, payload: userTokenSelection as string[] });
     nextTab();
   }
 
+  const checkSelectedAssets = (assets) => {
+    return assets.some((asset) => asset.isSelected)
+  }
+
   React.useEffect(() => {
-    setHasAssetsSelected(userTokenSelection.length > 0 || userNFTSelection.length > 0);
-  }, [userTokenSelection, userNFTSelection]);
+    setHasAssetsSelected(checkSelectedAssets(assetGuards.ERC20Assets) || checkSelectedAssets(assetGuards.ERC721Assets));
+  }, [assetGuards]);
+
+  const getSelectedAssetsCounts = (assets) => {
+    return assets.filter((asset) => asset.isSelected).length
+  }
 
   return (
-    <Container>
-      <Left>
-        <UserWalletWidget />
-      </Left>
-      <Right>
-        <TokenGrid rowSelectionModel={userTokenSelection} setRowSelectionModel={setUserTokenSelection} />
-        {NFT_SUPPORT_ENABLED &&
-          <NFTGrid walletAddress={userWallet} selectedNFTs={userNFTSelection} setSelectedNFTs={setUserNFTSelection} />}
-      </Right>
+    <>
+      <AssetSelection assetGuards={assetGuards} setAssetGuards={setAssetGuards} />
       <FixedNavigationBottomBar
-        message={`You've selected ${userTokenSelection.length} token(s)${NFT_SUPPORT_ENABLED ? ` and ${Object.values(userNFTSelection).filter((checked) => checked).length} NFTs` : ''}.`}>
+        message={`You've selected ${getSelectedAssetsCounts(assetGuards.ERC20Assets)} token(s)${NFT_SUPPORT_ENABLED ? ` and ${getSelectedAssetsCounts(assetGuards.ERC721Assets)} NFTs` : ''}.`}>
         <SimpleButton type="default" onClick={prevTab}>Back</SimpleButton>
-        <SimpleButton type={hasAssetsSelected ? "primary" : "secondary"} disabled={!hasAssetsSelected} onClick={() => handleConfirm()}>Select Assets</SimpleButton>
+        <SimpleButton type={hasAssetsSelected ? "primary" : "secondary"} disabled={!hasAssetsSelected} onClick={() => handleConfirm()}>Next</SimpleButton>
       </FixedNavigationBottomBar>
-    </Container>
+    </>
   );
 };

@@ -44,6 +44,7 @@ export enum ActionType {
   SET_ASSET_TO_EDIT = "SET_ASSET_TO_EDIT",
   SET_ASSET_TO_MODIFY = "SET_ASSET_TO_MODIFY",
   SET_ASSET_TO_ADD = "SET_ASSET_TO_ADD",
+  SET_ASSET_TO_APPROVE = "SET_ASSET_TO_APPROVE",
   SET_LOADER = "SET_LOADER",
   SET_SNAPS_INSTALLED = "SET_SNAPS_INSTALLED",
   SET_MM_FLASK_DETECTED = "SET_MM_FLASK_DETECTED",
@@ -68,6 +69,7 @@ export type Action =
   | { type: ActionType.SET_ASSET_TO_EDIT; payload: SelectedAssetForSetup }
   | { type: ActionType.SET_ASSET_TO_MODIFY; payload: SelectedAssetForSetup }
   | { type: ActionType.SET_ASSET_TO_ADD; payload: boolean }
+  | { type: ActionType.SET_ASSET_TO_APPROVE; payload: Object[] | null }
   | { type: ActionType.SET_LOADER; payload: LoaderState }
   | { type: ActionType.SET_SNAPS_INSTALLED; payload: Snap }
   | { type: ActionType.SET_MM_FLASK_DETECTED; payload: boolean }

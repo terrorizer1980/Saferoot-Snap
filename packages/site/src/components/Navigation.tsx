@@ -106,7 +106,7 @@ const Navigation = () => {
   const { state, dispatch } = useData();
   const { selectedTab, steps } = state;
   // The order of this below is important to the calculation of the progress bar
-  const pages = [Page.Connect, Page.UserWallet, Page.Tokens, Page.Safeguards, Page.BackupWallet, Page.DeployContract, Page.Review];
+  const pages = [Page.UserWallet, Page.Tokens, Page.Safeguards, Page.BackupWallet, Page.DeployContract];
 
   useEffect(() => {
     setProgress((pages.indexOf(selectedTab) / (pages.length - 1)) * 100);
@@ -125,13 +125,11 @@ const Navigation = () => {
         <ProgressBar width={progress} />
       </ProgressBarContainer>
       <NavigationStationContainer>
-        <NavigationItem label={"1"} completed={steps[0].completed} title={"Connect wallet"} onClick={() => setSelectedTab(Page.Connect)} selectedTab={selectedTab === Page.Connect} />
         <NavigationItem label={"2"} completed={steps[1].completed} title={"User Wallet"} onClick={() => setSelectedTab(Page.UserWallet)} selectedTab={selectedTab === Page.UserWallet} />
         <NavigationItem label={"3"} completed={steps[2].completed} title={"Token Selection"} onClick={() => setSelectedTab(Page.Tokens)} selectedTab={selectedTab === Page.Tokens} />
         <NavigationItem label={"4"} completed={steps[3].completed} title={"Safeguard Setup"} onClick={() => setSelectedTab(Page.Safeguards)} selectedTab={selectedTab === Page.Safeguards} />
         <NavigationItem label={"5"} completed={steps[4].completed} title={"Backup Wallet"} onClick={() => setSelectedTab(Page.BackupWallet)} selectedTab={selectedTab === Page.BackupWallet} />
         <NavigationItem label={"6"} completed={steps[5].completed} title={"Deploy Contract"} onClick={() => setSelectedTab(Page.DeployContract)} selectedTab={selectedTab === Page.DeployContract} />
-        <NavigationItem label={"7"} completed={steps[6].completed} title={"Review"} onClick={() => setSelectedTab(Page.Review)} selectedTab={selectedTab === Page.Review} />
       </NavigationStationContainer>
     </NavigationContainer>
   );

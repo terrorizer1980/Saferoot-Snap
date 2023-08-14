@@ -1,8 +1,14 @@
 export const ETH_ADDRESS_LENGTH_WITHOUT_PREFIX = 40;
 export const ETH_ADDRESS_LENGTH_WITH_PREFIX = 42;
+
 export enum ASSET_TYPE {
   TOKEN,
   NFT,
+}
+
+export enum ETHEREUM_TOKEN_STANDARD {
+  ERC20 = 'ERC20',
+  ERC721 = 'ERC721',
 }
 
 export enum HttpStatusCode {
@@ -16,6 +22,7 @@ export enum HttpStatusCode {
 }
 
 export enum NAVIGATION_PATHS {
-  ONBOARDING = '/',
+  LOGIN = '/',
+  ONBOARDING = '/onboarding',
   DASHBOARD = '/management',
 }
