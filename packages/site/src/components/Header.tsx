@@ -23,6 +23,9 @@ const RightContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
+  width: 30%;
+  margin-right: 30px;
 `;
 
 export const Header = () => {

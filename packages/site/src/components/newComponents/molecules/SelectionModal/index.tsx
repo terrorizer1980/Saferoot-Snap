@@ -14,6 +14,7 @@ import { Color, TextStyle } from "../../globalStyles";
 import { useData } from "../../../../hooks/DataContext";
 import { ETHEREUM_TOKEN_STANDARD, HttpStatusCode } from "../../../../constants";
 import { ActionType } from "../../../../hooks/actions";
+import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
 
 export type SelectionModalProps = {
   text: string;
@@ -28,8 +29,8 @@ export type SelectionModalProps = {
   refetch?: () => void;
 };
 
-export const handleResponse = (result: { status: HttpStatusCode }, dispatch, successCalls: () => void): void => {
-  switch (result.status) {
+export const handleResponse = (status: HttpStatusCode, dispatch, successCalls: () => void): void => {
+  switch (status) {
     case HttpStatusCode.Unauthorized:
       dispatch({ type: ActionType.SET_LOADER, payload: { open: true, message: "Unauthorized to process - please log in again." } });
       return;
@@ -54,23 +55,31 @@ export const SelectionModal = (props: SelectionModalProps) => {
 
   const modifySafeguardAPI = async (tokenType, safeGuardId, enabled = null) => {
     try {
-      const result = await fetch(
-        `http://localhost:5433/v0/safeguard/${safeGuardId}/${tokenType}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            enabled: !enabled,
-          }),
-          credentials: "include",
-        }
-      );
-
-      handleResponse(result, dispatch, () => {
-        dispatch({ type: ActionType.SET_ASSET_TO_MODIFY, payload: null });
-        refetch();
-      });
-
+      if (tokenType === ETHEREUM_TOKEN_STANDARD.ERC721) {
+        const { status } = await predefinedRequests(APICalls.EDIT_NFT_SAFEGUARD,
+          {
+            safeGuardId
+          },
+          {
+            enabled: !enabled
+          })
+        handleResponse(status, dispatch, () => {
+          dispatch({ type: ActionType.SET_ASSET_TO_MODIFY, payload: null });
+          refetch();
+        });
+      } else {
+        const { status } = await predefinedRequests(APICalls.DELETE_TOKEN_SAFEGUARD,
+          {
+            safeGuardId
+          },
+          {
+            enabled: !enabled
+          })
+        handleResponse(status, dispatch, () => {
+          dispatch({ type: ActionType.SET_ASSET_TO_MODIFY, payload: null });
+          refetch();
+        });
+      }
     } catch (error) {
       dispatch({ type: ActionType.SET_LOADER, payload: { open: true, message: "Something went wrong on our end, please try again later." } })
     }

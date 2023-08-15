@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import {
+  SafeguardSetupInfoContainer,
   SafeguardSetupNFTContainer,
   SafeguardSetupTokenContainer,
 } from "./styles";
 import { WalletCard } from "../../molecules";
 import { TableView } from "../../molecules/TableView";
 import {
-  GenericInfoContainer,
   GenericRoot,
   GenericWalletCardContainer,
 } from "../commonStyles";
@@ -56,7 +56,7 @@ const AssetSelection = ({ assetGuards, setAssetGuards }) => {
           network="ethereum marriot"
         />
       </GenericWalletCardContainer>
-      <GenericInfoContainer>
+      <SafeguardSetupInfoContainer>
         <SafeguardSetupTokenContainer>
           {ERC20NonGuarded?.length > 0 &&
             <TableView
@@ -81,7 +81,7 @@ const AssetSelection = ({ assetGuards, setAssetGuards }) => {
             />
           }
         </SafeguardSetupNFTContainer>
-      </GenericInfoContainer>
+      </SafeguardSetupInfoContainer>
     </GenericRoot>
   );
 };

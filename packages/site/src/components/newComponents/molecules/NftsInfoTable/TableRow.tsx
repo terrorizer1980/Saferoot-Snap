@@ -80,6 +80,8 @@ export const TableRow = (props: TableRowProps) => {
                 return "Approving...";
             case approveRes.isSuccess:
                 return "Approved";
+            case approveRes.isError:
+                return "Failed"
             default:
                 return "Approved";
         }

@@ -3,8 +3,9 @@ import { Spacing } from "../../globalStyles";
 import { devices } from "../../constants";
 
 export const SafeguardSetupInfoContainer = styled.div`
-  width: 100%;
+  width: 80%;
   @media only screen and ${devices.lg} {
+    width: 100%;
   }
 `;
 

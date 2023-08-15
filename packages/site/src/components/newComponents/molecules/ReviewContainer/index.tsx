@@ -20,6 +20,7 @@ import { TokenType } from "../../../../blockchain/enums";
 import { default as SaferootABI } from "../../../../blockchain/abi/SaferootABI.json";
 import { ethers } from "ethers";
 import { handleResponse } from "../SelectionModal";
+import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
 
 
 export type ReviewData = {
@@ -54,26 +55,15 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
   // save deployed contract address to context on success
   useEffect(() => {
     const saveDeployedContractAddress = async () => {
-      try {
-        const result = await fetch(`http://localhost:5433/createDeployedContract`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            chainId: chain.id,
-            networkId: chain.id,
-            contractAddress: res.data.logs[0].address,
-            userWalletAddress: userWallet
-          }),
-          credentials: "include",
-        });
-        if (result.status === HttpStatusCode.Unauthorized) {
-          return;
-        }
-      } catch (error) {
-        console.error("Error: ", error);
-      }
+      const { status } = await predefinedRequests(APICalls.CREATE_DEPLOYED_CONTRACT,
+        null,
+        {
+          chainId: chain.id,
+          networkId: chain.id,
+          contractAddress: res.data.logs[0].address,
+          userWalletAddress: userWallet
+        })
+      handleResponse(status, dispatch, () => { });
     }
     if (res.isSuccess) {
       onSuccess()
@@ -143,21 +133,15 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
     }
     assetAPICalled.current.push(safeguardID);
     try {
-      const result = await fetch(
-        `http://localhost:5433/v0/safeguard/value_guard?blockchain=ethereum&network=goerli`,
+      const { status } = await predefinedRequests(APICalls.ADD_SAFEGUARD,
+        null,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            safeGuardId: safeguardID,
-            networkId: chain.id,
-            enabled: true,
-            ceilingThresholds: createCeilingThresholds(safeguardID)
-          }),
-          credentials: "include",
-        }
-      );
-      handleResponse(result, dispatch, () => {
+          safeGuardId: safeguardID,
+          networkId: chain.id,
+          enabled: true,
+          ceilingThresholds: createCeilingThresholds(safeguardID)
+        })
+      handleResponse(status, dispatch, () => {
         dispatch({ type: ActionType.SET_ASSET_TO_EDIT, payload: null });
       });
     } catch (error) {

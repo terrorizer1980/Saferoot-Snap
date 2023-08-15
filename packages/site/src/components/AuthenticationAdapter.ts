@@ -2,14 +2,13 @@ import { createAuthenticationAdapter } from "@rainbow-me/rainbowkit";
 import { SiweMessage } from "siwe";
 import { setLocalStorage, getLocalStorage } from "../utils/localStorage";
 import Cookies from "js-cookie";
+import { APICalls, predefinedRequests } from "../hooks/API/helpers";
 
 export const AuthenticationAdapter = (onAuthenticated) =>
   createAuthenticationAdapter({
     getNonce: async (): Promise<string> => {
-      const response = await fetch(`http://localhost:5433/nonce`, {
-        credentials: "include",
-      });
-      return await response.text();
+      const { data } = await predefinedRequests(APICalls.NONCE)
+      return data;
     },
     createMessage: ({ nonce, address, chainId }): SiweMessage => {
       return new SiweMessage({
@@ -26,13 +25,11 @@ export const AuthenticationAdapter = (onAuthenticated) =>
       return message.prepareMessage();
     },
     verify: async ({ message, signature }): Promise<boolean> => {
-      const verifyRes = await fetch(`http://localhost:5433/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, signature }),
-        credentials: "include",
-      });
-      const verificationSuccessful = Boolean(verifyRes.ok);
+      const { data } = await predefinedRequests(APICalls.VERIFY, null, {
+        message,
+        signature
+      })
+      const verificationSuccessful = Boolean(data);
       if (verificationSuccessful) {
         setLocalStorage("authenticated-address", message.address);
         onAuthenticated();

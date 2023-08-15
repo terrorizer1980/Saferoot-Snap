@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { APICalls, predefinedRequests } from "./API/helpers";
 // Create a new context object
 export const AuthContext = createContext(null);
 
@@ -11,19 +12,9 @@ export const AuthProvider = ({ children }) => {
   };
 
 
-  const signOutHandler = () => {
-    try {
-      fetch(`http://localhost:5433/signout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-      setAuthenticated(false);
-    } catch (e) {
-      console.log(e);
-    }
+  const signOutHandler = async () => {
+    await predefinedRequests(APICalls.SIGN_OUT)
+    setAuthenticated(false);
   };
 
   return (

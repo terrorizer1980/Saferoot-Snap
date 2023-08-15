@@ -9,7 +9,10 @@ import { CoinId } from "../../atoms/CoinId";
 import { SelectionModal } from "../SelectionModal";
 import { EditTokenModal } from "../EditTokenModal";
 import { SecurityInfo } from "../../atoms/SecurityInfo";
-import { AssetSelectionFilter, defaultIcon, defaultTagIcon } from "../../constants";
+import {
+  AssetSelectionFilter,
+  defaultIcon,
+} from "../../constants";
 import {
   TableFilterContainer,
   TableHeaderContainer,
@@ -23,7 +26,11 @@ import { GenericHorizontalSpacer } from "../../organisms/commonStyles";
 import { ActionType } from "../../../../hooks/actions";
 import { ASSET_TYPE, ETHEREUM_TOKEN_STANDARD } from "../../../../constants";
 import { SelectionButton } from "../../atoms/SelectionButton";
-import { AssetGuard, AssetGuards, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import {
+  AssetGuard,
+  AssetGuards,
+  updateAssetProperties,
+} from "../../../../hooks/Assets/useAssetGuards";
 import { TableRow } from "./TableRow";
 
 export type TokensInfoTableProps = {
@@ -48,7 +55,7 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
     setData,
     buttonOptions,
     selectable,
-    refetch
+    refetch,
   } = props;
   const { state, dispatch } = useData();
 
@@ -58,8 +65,13 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
   const [activeModalRowEdit, setActiveModalRowEdit] = useState<string>();
 
   const selectThisToken = (item) => {
-    updateAssetProperties(setData, "ERC20Assets", { address: item?.address }, { isSelected: !item?.isSelected });
-  }
+    updateAssetProperties(
+      setData,
+      "ERC20Assets",
+      { address: item?.address },
+      { isSelected: !item?.isSelected }
+    );
+  };
 
   const onClickDelete = (rowIndex) => {
     setOpenModalDelete(true);
@@ -67,14 +79,25 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
   };
 
   const onClickEdit = (rowIndex, address, symbol) => {
-    dispatch({ type: ActionType.SET_ASSET_TO_EDIT, payload: { assetType: ASSET_TYPE.TOKEN, address: address, id: null, symbol: symbol } })
+    dispatch({
+      type: ActionType.SET_ASSET_TO_EDIT,
+      payload: {
+        assetType: ASSET_TYPE.TOKEN,
+        address: address,
+        id: null,
+        symbol: symbol,
+      },
+    });
     setOpenModalEdit(true);
     setActiveModalRowEdit(rowIndex);
   };
 
   const defineAccessor = (key: string) => {
     const value =
-      typeof data[0][key.toLowerCase()] === "string" ? key.toLowerCase() : "";
+      typeof data[0][key.toLowerCase()] === "string" ||
+      typeof data[0][key.toLowerCase()] === "number"
+        ? key.toLowerCase()
+        : "";
     return value;
   };
 
@@ -82,13 +105,14 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
     // explain what this function does
     const value =
       typeof data[0][key.toLowerCase()] === "string" ||
-        key.toLowerCase() == "token" ||
-        key.toLowerCase() == "nft"
-        ? `${40 /
-        Object.keys(data[0]).findIndex((x) => {
-          return x == "security";
-        })
-        }vw`
+      key.toLowerCase() == "token" ||
+      key.toLowerCase() == "nft"
+        ? `${
+            40 /
+            Object.keys(data[0]).findIndex((x) => {
+              return x == "security";
+            })
+          }vw`
         : "15vw";
     return value;
   };
@@ -105,12 +129,12 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
     });
     buttonOptions && (buttonOptions.edit || buttonOptions.delete)
       ? newObj.push({
-        Header: "actions",
-        accessor: "",
-        maxWidth: "400px",
-        minWidth: "150px",
-        width: "fit-content",
-      })
+          Header: "actions",
+          accessor: "",
+          maxWidth: "400px",
+          minWidth: "150px",
+          width: "fit-content",
+        })
       : null;
     return newObj;
   }, []);
@@ -141,7 +165,7 @@ export const TokensInfoTable = (props: TokensInfoTableProps) => {
                 {"(" + data.length + ")"}
               </Typography>
             </GenericHorizontalSpacer>
-            <Switch onChange={() => { }} />
+            <Switch onChange={() => {}} />
           </TableFilterContainer>
         )}
       </TableHeaderContainer>

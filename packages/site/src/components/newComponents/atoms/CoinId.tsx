@@ -10,7 +10,7 @@ export type CoinIdProps = {
 };
 
 export const CoinId = (props: CoinIdProps) => {
-  const { image, id = "UNK_" } = props;
+  const { image, id = "" } = props;
   return (
     <AvatarIDContainer>
       <CoinIDImage src={image ?? defaultIcon}></CoinIDImage>

@@ -20,6 +20,8 @@ import { ethtoWeiString } from "../../../../blockchain/helpers/ethtoWeiString";
 import { AssetGuard, AssetGuards, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
 import { SimpleButton } from "../../../SimpleButton";
 import { handleResponse } from "../SelectionModal";
+import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
+import { HttpStatusCode } from "../../../../constants";
 
 export type EditTokenModalProps = {
   type: string;
@@ -45,25 +47,19 @@ export const EditTokenModal = (props: EditTokenModalProps) => {
 
   const editSafeguardAPI = async (address, safeGuardId, value) => {
     try {
-      const result = await fetch(
-        `http://localhost:5433/v0/safeguard/${safeGuardId.toString()}/ERC20`,
+      const { status } = await predefinedRequests(APICalls.EDIT_TOKEN_SAFEGUARD,
         {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contractAddress: address,
-            value_limit: ethtoWeiString(Number(value)),
-          }),
-          credentials: "include",
-        }
-      );
-
-      handleResponse(result, dispatch, () => {
+          safeGuardId
+        },
+        {
+          contractAddress: address,
+          value_limit: ethtoWeiString(Number(value)),
+        })
+      handleResponse(status, dispatch, () => {
         dispatch({ type: ActionType.SET_ASSET_TO_EDIT, payload: null });
         refetch();
         onClickClose();
       });
-
     } catch (error) {
       console.log(error)
       dispatch({ type: ActionType.SET_LOADER, payload: { open: true, message: "Something went wrong on our end, please try again later." } })
@@ -89,7 +85,7 @@ export const EditTokenModal = (props: EditTokenModalProps) => {
     onClickClose();
   }
 
-  const isValidAmount = (value) => {
+  const isValidAmount = (value: string) => {
     if (typeof value !== 'string' || value.length === 0) {
       return false;
     }

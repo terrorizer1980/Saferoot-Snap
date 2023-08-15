@@ -10,10 +10,10 @@ export type AvatarIdProps = {
 };
 
 export const AvatarId = (props: AvatarIdProps) => {
-  const { image, id = "#0420 UNK_" } = props;
+  const { image, id = "" } = props;
   return (
     <AvatarIDContainer>
-      {image && <AvatarIDImage src={image ?? defaultAvatar}></AvatarIDImage>}
+      {image && <AvatarIDImage src={image}></AvatarIDImage>}
       <div style={{ margin: Spacing.avatarIDTextPadding }}>
         <Typography {...TextStyle.blackMediumLabel} {...TextStyle.boldText}>
           {id}

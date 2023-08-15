@@ -13,7 +13,7 @@ export const UserId = (props: UserIdProps) => {
   const { image, id = "#6735 BAYC" } = props;
   return (
     <UserIDContainer>
-      {image && <CoinIDImage src={image ?? defaultUser}></CoinIDImage>}
+      {image && <CoinIDImage src={image}></CoinIDImage>}
       <div style={{ margin: Spacing.avatarIDTextPadding }}>
         <Typography {...TextStyle.blackExtraSmallLabel}>
           {id}

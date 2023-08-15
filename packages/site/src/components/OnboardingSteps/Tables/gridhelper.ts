@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { APICalls, predefinedRequests } from "../../../hooks/API/helpers";
 // Type of supported tokens from database record
 export type SupportedToken = {
   address: string;
@@ -68,85 +69,13 @@ if (typeof window !== 'undefined' && window.ethereum) {
   console.error("Please install MetaMask or another Ethereum wallet extension");
 }
 
-export const fetchNFTs = async (
-  chainId: number,
-  setNFTs?: React.Dispatch<React.SetStateAction<NFTData[]>>
-): Promise<NFTData[]> => {
-  try {
-    const response = await fetch(
-      `http://localhost:5433/ethereum/v0/${chainId}/userERC721Asset`,
-      { credentials: "include" }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch NFTs`);
-    }
-
-    const data = await response.json();
-
-    const retrievedNFTDataObjects = await Promise.all(
-      data.map(async (nft) => {
-        const contract = new ethers.Contract(
-          nft.contract_address,
-          ["function tokenURI(uint256) view returns (string)"],
-          provider
-        );
-        const tokenURI = await contract.tokenURI(nft.token_id);
-
-        let metadata = {};
-        if (tokenURI) {
-          try {
-            const res = await fetch(tokenURI);
-            metadata = await res.json();
-          } catch (e) {
-            console.error(`Error fetching tokenURI: ${e}`);
-          }
-        }
-        return {
-          name: metadata?.name || "Unknown",
-          id: metadata?.id || nft.token_id,
-          imageUrl: metadata?.image || null,
-          tokenId: nft.token_id,
-          collection: {
-            id: null,
-            name: metadata?.collection || "Unknown",
-          },
-          assetContract: {
-            address: nft.contract_address,
-            chainIdentifier: nft.chain_id,
-            schemaName: "",
-            owner: "",
-            assetContractType: "",
-          },
-          ethAmount: null,
-          usdAmount: null,
-        };
-      })
-    );
-
-    if (setNFTs) setNFTs(retrievedNFTDataObjects);
-
-    return retrievedNFTDataObjects;
-  } catch (error) {
-    console.error(`Error fetching NFTs: ${error}`);
-    return [];
-  }
-};
-
 // Fetches supported tokens from the API
 export const fetchSupportedTokens = async (
   chainId: number,
   setSupportedTokens?: React.Dispatch<React.SetStateAction<SupportedToken[]>>
 ): Promise<SupportedToken[]> => {
   try {
-    const response = await fetch(
-      `http://localhost:5433/ethereum/v0/${chainId}/supported_token`
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch supported tokens`);
-    }
-    const data = await response.json();
+    const { data } = await predefinedRequests(APICalls.GET_SUPPORTED_TOKENS, { chainId })
     if (setSupportedTokens) setSupportedTokens(data);
     return data;
   } catch (error) {
@@ -216,7 +145,7 @@ export const fetchSupportedTokensAndBalances = async (
 export const fetchTokenSafeguards = async (): Promise<any> => {
   try {
     const response = await fetch(
-      `http://localhost:5433/v0/getSafeguards`,
+      `${process.env.GATSBY_API_URL}/v0/getSafeguards`,
       {
         method: "GET",
         headers: {

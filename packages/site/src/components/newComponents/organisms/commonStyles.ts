@@ -4,6 +4,7 @@ import { devices } from "../constants";
 
 export const GenericRoot = styled.div`
   display: flex;
+  width: 100%;
   margin: ${Spacing.dashboardMargin};
   @media only screen and ${devices.lg} {
     margin: ${Spacing.dashboardMobileMargin};
@@ -12,7 +13,7 @@ export const GenericRoot = styled.div`
 `;
 
 export const GenericWalletCardContainer = styled.div`
-  width: 40vw;
+  width: 30%;
   margin: ${Spacing.dashboardCard1Margin};
   @media only screen and ${devices.lg} {
     width: 100%;
@@ -21,7 +22,7 @@ export const GenericWalletCardContainer = styled.div`
 `;
 
 export const GenericInfoContainer = styled.div`
-  width: 100%;
+  width: 80%;
   padding: ${Spacing.GenericDialoguePadding};
   border-radius: 8px;
   border: solid 1px ${Color.borderColor};

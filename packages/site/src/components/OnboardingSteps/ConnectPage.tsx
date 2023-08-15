@@ -13,6 +13,7 @@ import { MM_SNAPS_ENABLED } from "../../config/environmentVariable";
 import { HttpStatusCode, NAVIGATION_PATHS } from "../../constants";
 import { navigate } from "gatsby";
 import { Container } from "./styles";
+import { APICalls, predefinedRequests } from "../../hooks/API/helpers";
 
 const ConnectWalletImage = styled.img`
   padding-bottom: 80px;
@@ -47,21 +48,13 @@ export const ConnectPage = () => {
 
   const checkOnboarded = async () => {
     try {
-      const result = await fetch(`http://localhost:5433/getDeployedContract`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: "include",
-      });
-      // process your data here
-      const data: getDeployedContractResponse[] = await result.json();
+      const { data, status } = await predefinedRequests(APICalls.GET_DEPLOYED_CONTRACT)
       if (data.length > 0) {
         dispatch({ type: ActionType.SET_DEPLOYED_SAFEROOT_ADDRESS, payload: data[0].contract_address })
       } else {
         navigate(NAVIGATION_PATHS.ONBOARDING);
       }
-      if (result.status === HttpStatusCode.Unauthorized) {
+      if (status === HttpStatusCode.Unauthorized) {
         return;
       }
     } catch (error) {
@@ -102,7 +95,7 @@ export const ConnectPage = () => {
           button: (
             <ButtonGroupContainer>
               {error && <p style={{ color: "red" }}>{error.message}</p>}
-              {true && <SnapsConnectButton />}
+              {MM_SNAPS_ENABLED && <SnapsConnectButton />}
               <br />
               {!authenticated && <ConnectButton />}
               {isConnected && authenticated && (
