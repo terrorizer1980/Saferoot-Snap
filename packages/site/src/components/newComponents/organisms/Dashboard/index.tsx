@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   DashboardButtonContainer,
   DashboardCard1,
   DashboardCard2,
-  DashboardCard3,
   DashboardCardsContainer,
   DashboardNFTTableRoot,
   DashboardRoot,
@@ -11,14 +10,13 @@ import {
 } from "./styles";
 import { Button } from "../../atoms/Button";
 import { Dimensions } from "../../globalStyles";
-import { AssetCard, RecentActivityCard, WalletCard } from "../../molecules";
+import { AssetCard, WalletCard } from "../../molecules";
 import { TableView } from "../../molecules/TableView";
 import useAssetGuards from "../../../../hooks/Assets/useAssetGuards";
 import { navigate } from "gatsby";
 import { NAVIGATION_PATHS } from "../../../../constants";
 import { ActionType, Page } from "../../../../hooks/actions";
 import { useData } from "../../../../hooks/DataContext";
-import { useAccount, useBalance, useNetwork } from "wagmi";
 import { EmptyStateContainer } from "../../../EmptyStateContainer";
 import { LoaderModal } from "../../../LoaderModal";
 
@@ -35,7 +33,9 @@ const Dashboard = () => {
     dispatch({ type: ActionType.SET_ASSET_TO_ADD, payload: true })
   };
 
-  const unprotectedAssets = [...ERC20Assets, ...ERC721Assets].filter((asset) => !asset.isPreGuarded)
+  const unProtectedERC20s = ERC20Assets.filter((asset) => !asset.isPreGuarded)
+  console.log(unProtectedERC20s, '💋')
+  const unProtectedERC721s = ERC721Assets.filter((asset) => !asset.isPreGuarded)
 
   return (
     <DashboardRoot>
@@ -53,7 +53,7 @@ const Dashboard = () => {
         </DashboardCard2>
       </DashboardCardsContainer>
       <DashboardButtonContainer>
-        {unprotectedAssets.length > 0 &&
+        {unProtectedERC20s.length + unProtectedERC721s.length > 0 &&
           <Button image="/add.svg" text="Add Assets to Protect" width={Dimensions.dashboardButtonWidth} border="rounded" onClick={launchAddAssetsFlow} />
         }
       </DashboardButtonContainer>
@@ -73,11 +73,11 @@ const Dashboard = () => {
           refetch={refetch}
         />
           :
-          <>
+          (unProtectedERC20s.length > 0 && <>
             <EmptyStateContainer message="You have no tokens protected yet." button={
-              <Button onClick={launchAddAssetsFlow} text="Add NFTs" />
+              <Button onClick={launchAddAssetsFlow} text="Add tokens" />
             } />
-          </>
+          </>)
         }
       </DashboardTokensTableRoot>
       <DashboardNFTTableRoot>
@@ -91,11 +91,11 @@ const Dashboard = () => {
           refetch={refetch}
         />
           :
-          <>
+          (unProtectedERC721s.length > 0 && <>
             <EmptyStateContainer message="You have no NFTs protected yet." button={
               <Button onClick={launchAddAssetsFlow} text="Add NFTs" />
             } />
-          </>}
+          </>)}
       </DashboardNFTTableRoot>
     </DashboardRoot>
   );

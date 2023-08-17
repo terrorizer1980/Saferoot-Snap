@@ -4,13 +4,15 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
     'Content-Type': 'application/json',
   };
   const credentials = "include";
+  const DEV_API = "http://localhost:5433"
+  const ALCHEMY_API_KEY = "Khsm5Voj_du9RXZe6CmhvqAZUY3DS6es"
 
   switch (key) {
 
     // Auth
 
     case APICalls.NONCE:
-      req = await fetch(`http://localhost:5433/nonce`, {
+      req = await fetch(`${DEV_API}/nonce`, {
         method: "GET",
         credentials,
       });
@@ -19,18 +21,18 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.VERIFY:
-      req = await fetch(`http://localhost:5433/verify`, {
+      req = await fetch(`${DEV_API}/verify`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
         credentials,
-      });
+      })
       data = await req.ok;
       status = req.status;
       return { data, status };
 
     case APICalls.SIGN_OUT:
-      req = await fetch(`http://localhost:5433/signout`, {
+      req = await fetch(`${DEV_API}/signout`, {
         method: "POST",
         headers,
         credentials,
@@ -42,7 +44,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
     // User Deployed Contracts
 
     case APICalls.CREATE_DEPLOYED_CONTRACT:
-      req = await fetch(`http://localhost:5433/createDeployedContract`, {
+      req = await fetch(`${DEV_API}/createDeployedContract`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
@@ -53,7 +55,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.GET_DEPLOYED_CONTRACT:
-      req = await fetch(`http://localhost:5433/getDeployedContract`, {
+      req = await fetch(`${DEV_API}/getDeployedContract`, {
         method: "GET",
         headers,
         credentials,
@@ -65,7 +67,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
     // Assets
 
     case APICalls.GET_SUPPORTED_TOKENS:
-      req = await fetch(`http://localhost:5433/ethereum/v0/${urlParams.chainId}/supported_token`, {
+      req = await fetch(`${DEV_API}/ethereum/v0/${urlParams.chainId}/supported_token`, {
         method: "GET",
         headers,
       });
@@ -74,7 +76,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.GET_USER_NFTS:
-      req = await fetch(`https://eth-goerli.g.alchemy.com/nft/v2/${process.env.GATSBY_REACT_APP_ALCHEMY_API_KEY}/getNFTs?owner=${urlParams?.userWallet}&withMetadata=true&pageSize=100`, {
+      req = await fetch(`https://eth-goerli.g.alchemy.com/nft/v2/${ALCHEMY_API_KEY}/getNFTs?owner=${urlParams?.userWallet}&withMetadata=true&pageSize=100`, {
         method: "GET",
         headers,
       });
@@ -85,7 +87,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
     // Safeguards
 
     case APICalls.GET_SAFEGUARDS:
-      req = await fetch(`http://localhost:5433/v0/getSafeguards`, {
+      req = await fetch(`${DEV_API}/v0/getSafeguards`, {
         method: "GET",
         headers,
         credentials,
@@ -95,7 +97,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.ADD_SAFEGUARD:
-      req = await fetch(`http://localhost:5433/v0/safeguard/value_guard?blockchain=ethereum&network=goerli`, {
+      req = await fetch(`${DEV_API}/v0/safeguard/value_guard?blockchain=ethereum&network=goerli`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
@@ -106,7 +108,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.EDIT_TOKEN_SAFEGUARD:
-      req = await fetch(`http://localhost:5433/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
+      req = await fetch(`${DEV_API}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
         method: "PUT",
         body: JSON.stringify(bodyParams),
         headers,
@@ -117,7 +119,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.EDIT_NFT_SAFEGUARD:
-      req = await fetch(`http://localhost:5433/v0/safeguard/${urlParams.safeGuardId}/ERC721`, {
+      req = await fetch(`${DEV_API}/v0/safeguard/${urlParams.safeGuardId}/ERC721`, {
         method: "DELETE",
         body: JSON.stringify(bodyParams),
         headers,
@@ -128,7 +130,7 @@ export const predefinedRequests = async (key: APICalls, urlParams = null, bodyPa
       return { data, status };
 
     case APICalls.DELETE_TOKEN_SAFEGUARD:
-      req = await fetch(`http://localhost:5433/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
+      req = await fetch(`${DEV_API}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
         method: "DELETE",
         body: JSON.stringify(bodyParams),
         headers,

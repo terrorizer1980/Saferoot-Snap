@@ -9,7 +9,6 @@ import { ActionType } from "../../hooks/actions";
 import { AuthContext } from "../../hooks";
 import { SnapsConnectButton } from "../Snaps";
 import { SimpleButton } from "../SimpleButton";
-import { MM_SNAPS_ENABLED } from "../../config/environmentVariable";
 import { HttpStatusCode, NAVIGATION_PATHS } from "../../constants";
 import { navigate } from "gatsby";
 import { Container } from "./styles";
@@ -95,7 +94,7 @@ export const ConnectPage = () => {
           button: (
             <ButtonGroupContainer>
               {error && <p style={{ color: "red" }}>{error.message}</p>}
-              {MM_SNAPS_ENABLED && <SnapsConnectButton />}
+              <SnapsConnectButton />
               <br />
               {!authenticated && <ConnectButton />}
               {isConnected && authenticated && (
