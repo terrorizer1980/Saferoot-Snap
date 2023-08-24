@@ -24,5 +24,5 @@ export enum HttpStatusCode {
 export enum NAVIGATION_PATHS {
   LOGIN = '/',
   ONBOARDING = '/onboarding',
-  DASHBOARD = '/management',
+  DASHBOARD = '/dashboard',
 }

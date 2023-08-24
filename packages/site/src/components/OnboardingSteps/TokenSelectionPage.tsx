@@ -1,6 +1,7 @@
 import React from 'react';
 import type { } from '@mui/x-data-grid/themeAugmentation';
 import FixedNavigationBottomBar from '../FixedNavigationBottomBar';
+import { NFT_SUPPORT_ENABLED } from '../../config/environmentVariable';
 import { SimpleButton } from '../SimpleButton';
 import AssetSelection from '../newComponents/organisms/AssetSelection';
 
@@ -28,7 +29,7 @@ export const TokenSelectionPage = ({ nextTab, prevTab, assetGuards, setAssetGuar
     <>
       <AssetSelection assetGuards={assetGuards} setAssetGuards={setAssetGuards} />
       <FixedNavigationBottomBar
-        message={`You've selected ${getSelectedAssetsCounts(assetGuards.ERC20Assets)} token(s) and ${getSelectedAssetsCounts(assetGuards.ERC721Assets)} NFTs.`}>
+        message={`You've selected ${getSelectedAssetsCounts(assetGuards.ERC20Assets)} token(s)${NFT_SUPPORT_ENABLED ? ` and ${getSelectedAssetsCounts(assetGuards.ERC721Assets)} NFTs` : ''}.`}>
         <SimpleButton type="default" onClick={prevTab}>Back</SimpleButton>
         <SimpleButton type={hasAssetsSelected ? "primary" : "secondary"} disabled={!hasAssetsSelected} onClick={() => handleConfirm()}>Next</SimpleButton>
       </FixedNavigationBottomBar>

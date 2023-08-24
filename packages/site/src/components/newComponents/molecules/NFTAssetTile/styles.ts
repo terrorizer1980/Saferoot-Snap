@@ -1,4 +1,4 @@
-import { Color, Dimensions, Spacing } from "../../globalStyles";
+import { Spacing } from "../../globalStyles";
 import { devices } from "../../constants";
 import styled from 'styled-components';
 

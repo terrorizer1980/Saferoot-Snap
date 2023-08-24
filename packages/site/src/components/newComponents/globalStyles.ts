@@ -1,6 +1,6 @@
-export type objectStyleProps = {
+export interface objectStyleProps {
   [key: string]: string | number;
-};
+}
 
 export const Color: objectStyleProps = {
   limeGreen: "#E9FFF0",

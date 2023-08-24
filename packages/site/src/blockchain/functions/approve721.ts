@@ -14,7 +14,7 @@ export const approve721 = (args: {
   to: Address;
   saferootAddress: Address;
   tokenId: string;
-}) => {
+}): ReturnType<typeof useWagmiWrite> => {
   const hook = useWagmiWrite(args.to, NFTABI, "approve", [
     args.saferootAddress,
     args.tokenId,

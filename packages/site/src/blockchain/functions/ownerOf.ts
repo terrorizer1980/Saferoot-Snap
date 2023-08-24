@@ -9,7 +9,7 @@ import { Address } from "wagmi";
  * tokenId: the id of the token you want to get the owner of
  * @returns a wagmi hook object
  */
-export const ownerOf = (args: { tokenAddress: Address; tokenId: string }) => {
+export const ownerOf = (args: { tokenAddress: Address; tokenId: string }): ReturnType<typeof useWagmiRead> => {
   const hook = useWagmiRead(args.tokenAddress, NFTABI, "ownerOf", [
     args.tokenId,
   ]);

@@ -3,7 +3,7 @@
  *
  * @returns True if the MetaMask version is Flask, false otherwise.
  */
-export const isFlask = async () => {
+export const isFlask = async (): Promise<boolean> => {
     const provider = window.ethereum;
 
     try {
@@ -13,7 +13,7 @@ export const isFlask = async () => {
 
         const isFlaskDetected = (clientVersion as string[])?.includes('flask');
 
-        return Boolean(provider && isFlaskDetected);
+        return isFlaskDetected || false;
     } catch {
         return false;
     }

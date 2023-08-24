@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "description": "An example Snap written in TypeScript.",
-  "proposedName": "TypeScript Example Snap",
+  "description": "A Saferoot Snap!",
+  "proposedName": "Saferoot",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "OTnmF+R/JzyeU4jkiAXHU9F0LTWJCGO82pgG0dkXiyU=",
+    "shasum": "MLjRsoQBSJELwWuN3+Uuw6n4KWnZfVIqIJ48DfTxKWI=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
