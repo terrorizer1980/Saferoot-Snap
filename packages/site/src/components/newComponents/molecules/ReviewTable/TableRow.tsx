@@ -120,7 +120,7 @@ export const TableRow = (props: TableRowProps) => {
                                 onClick={() => {
                                     approveAssetTrigger.write?.()
                                 }}
-                                disabled={approveRes.isLoading}>
+                                disabled={approveRes.isLoading || approveRes.isSuccess}>
                                 {getApprovalText()}
                             </SimpleButton>
                         </div>

@@ -7,18 +7,18 @@ import {
   DashboardNFTTableRoot,
   DashboardRoot,
   DashboardTokensTableRoot,
-} from "./styles";
-import { Button } from "../../atoms/Button";
-import { Dimensions } from "../../globalStyles";
-import { AssetCard, WalletCard } from "../../molecules";
-import { TableView } from "../../molecules/TableView";
-import useAssetGuards from "../../../../hooks/Assets/useAssetGuards";
+} from "../components/newComponents/organisms/Dashboard/styles";
+import { Button } from "../components/newComponents/atoms/Button";
+import { Dimensions } from "../components/newComponents/globalStyles";
+import { AssetCard, WalletCard } from "../components/newComponents/molecules";
+import { TableView } from "../components/newComponents/molecules/TableView";
+import useAssetGuards from "../hooks/Assets/useAssetGuards";
 import { navigate } from "gatsby";
-import { NAVIGATION_PATHS } from "../../../../constants";
-import { ActionType, Page } from "../../../../hooks/actions";
-import { useData } from "../../../../hooks/DataContext";
-import { EmptyStateContainer } from "../../../EmptyStateContainer";
-import { LoaderModal } from "../../../LoaderModal";
+import { NAVIGATION_PATHS } from "../constants";
+import { ActionType, Page } from "../hooks/actions";
+import { useData } from "../hooks/DataContext";
+import { EmptyStateContainer } from "../components/EmptyStateContainer";
+import { LoaderModal } from "../components/LoaderModal";
 
 const Dashboard = () => {
 
@@ -34,8 +34,8 @@ const Dashboard = () => {
   };
 
   const unProtectedERC20s = ERC20Assets.filter((asset) => !asset.isPreGuarded)
-  console.log(unProtectedERC20s, '💋')
   const unProtectedERC721s = ERC721Assets.filter((asset) => !asset.isPreGuarded)
+  const hasUnprotectedAssets = (unProtectedERC20s.length + unProtectedERC721s.length) > 0
 
   return (
     <DashboardRoot>
@@ -53,7 +53,7 @@ const Dashboard = () => {
         </DashboardCard2>
       </DashboardCardsContainer>
       <DashboardButtonContainer>
-        {unProtectedERC20s.length + unProtectedERC721s.length > 0 &&
+        {hasUnprotectedAssets &&
           <Button image="/add.svg" text="Add Assets to Protect" width={Dimensions.dashboardButtonWidth} border="rounded" onClick={launchAddAssetsFlow} />
         }
       </DashboardButtonContainer>

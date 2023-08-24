@@ -14,7 +14,8 @@ import { Color, TextStyle } from "../../globalStyles";
 import { useData } from "../../../../hooks/DataContext";
 import { ETHEREUM_TOKEN_STANDARD, HttpStatusCode } from "../../../../constants";
 import { ActionType } from "../../../../hooks/actions";
-import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
+import { makeAPICall } from "../../../../hooks/API/helpers";
+import { APICalls } from "../../../../hooks/API/types";
 
 export type SelectionModalProps = {
   text: string;
@@ -56,25 +57,25 @@ export const SelectionModal = (props: SelectionModalProps) => {
   const modifySafeguardAPI = async (tokenType, safeGuardId, enabled = null) => {
     try {
       if (tokenType === ETHEREUM_TOKEN_STANDARD.ERC721) {
-        const { status } = await predefinedRequests(APICalls.EDIT_NFT_SAFEGUARD,
+        const { status } = await makeAPICall(APICalls.TOGGLE_NFT_SAFEGUARD,
           {
             safeGuardId
           },
           {
             enabled: !enabled
-          })
+          }, dispatch)
         handleResponse(status, dispatch, () => {
           dispatch({ type: ActionType.SET_ASSET_TO_MODIFY, payload: null });
           refetch();
         });
       } else {
-        const { status } = await predefinedRequests(APICalls.DELETE_TOKEN_SAFEGUARD,
+        const { status } = await makeAPICall(APICalls.TOGGLE_TOKEN_SAFEGUARD,
           {
             safeGuardId
           },
           {
             enabled: !enabled
-          })
+          }, dispatch)
         handleResponse(status, dispatch, () => {
           dispatch({ type: ActionType.SET_ASSET_TO_MODIFY, payload: null });
           refetch();

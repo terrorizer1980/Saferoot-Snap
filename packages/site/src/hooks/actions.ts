@@ -69,7 +69,7 @@ export type Action =
   | { type: ActionType.SET_ASSET_TO_EDIT; payload: SelectedAssetForSetup }
   | { type: ActionType.SET_ASSET_TO_MODIFY; payload: SelectedAssetForSetup }
   | { type: ActionType.SET_ASSET_TO_ADD; payload: boolean }
-  | { type: ActionType.SET_ASSET_TO_APPROVE; payload: Object[] | null }
+  | { type: ActionType.SET_ASSET_TO_APPROVE; payload: object[] | null }
   | { type: ActionType.SET_LOADER; payload: LoaderState }
   | { type: ActionType.SET_SNAPS_INSTALLED; payload: Snap }
   | { type: ActionType.SET_MM_FLASK_DETECTED; payload: boolean }

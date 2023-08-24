@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Color, Dimensions, Spacing } from "../../globalStyles";
+import { Color, Spacing } from "../../globalStyles";
 import { devices } from "../../constants";
 
 export const StepDescriptionRoot = styled.div`

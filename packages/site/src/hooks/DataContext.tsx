@@ -9,7 +9,6 @@ import {
 } from "../components/OnboardingSteps/Tables/gridhelper";
 import { Action, ActionType } from "./actions";
 import { Step } from "../components/Navigation";
-import { Safeguard } from "../components/OnboardingSteps/SafeguardSetup/";
 import { Snap } from "../types";
 import { isFlask, getSnap } from "../utils";
 import { AssetToApprove } from './ContractInteractions/useContractInteraction';
@@ -21,15 +20,13 @@ interface DataState {
   saferootSupportedTokens: SupportedToken[];
   userTokenBalances: TokenBalance[];
   selectedTokens: string[];
-  tokenSafeguards: Safeguard[];
   userNFTs: NFTData[];
   selectedNFTs: SelectedNFTToken[]; // Id of the NFT from opensea
-  nftSafeguards: Safeguard[];
   selectedTab: Page;
   steps: Step[];
   approvedCounter: number;
-  assetToEdit: SelectedAssetForSetup;
-  assetToModify: SelectedAssetForSetup;
+  assetToEdit: SelectedAssetForSetup | null;
+  assetToModify: SelectedAssetForSetup | null;
   assetToAdd: boolean
   assetToApprove?: AssetToApprove[];
   loader: LoaderState;
@@ -45,10 +42,8 @@ const initialState: DataState = {
   saferootSupportedTokens: [],
   userTokenBalances: [],
   selectedTokens: [],
-  tokenSafeguards: [],
   userNFTs: [],
   selectedNFTs: [],
-  nftSafeguards: [],
   selectedTab: Page.UserWallet,
   steps: [
     { step: 1, pageType: Page.Connect, disabled: true, completed: false },
@@ -150,11 +145,13 @@ function addUserNFT(state: DataState, action: Action) {
   }
 }
 
-// Create a new context object
 export const DataContext = createContext<{
   state: DataState;
   dispatch: React.Dispatch<Action>;
-} | null>(null);
+}>({
+  state: initialState, // Provide initial state here
+  dispatch: () => {}, // Provide a default dispatch function
+});
 
 export const DataProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -216,5 +213,10 @@ export const DataProvider = ({ children }) => {
   );
 };
 
-// Define a hook to access the data context
-export const useData = () => useContext(DataContext);
+export const useData = () => {
+  const context = useContext(DataContext);
+  if (!context) {
+    throw new Error("useData must be used within a DataProvider");
+  }
+  return context;
+};

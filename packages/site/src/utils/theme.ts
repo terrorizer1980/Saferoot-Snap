@@ -1,27 +1,19 @@
-import { getLocalStorage, setLocalStorage } from './localStorage';
-
 /**
  * Get the user's preferred theme in local storage.
  * Will default to the browser's preferred theme if there is no value in local storage.
  *
  * @returns True if the theme is "dark" otherwise, false.
  */
-export const getThemePreference = () => {
+export const getThemePreference = (): boolean => {
   if (typeof window === 'undefined') {
     return false;
   }
 
-  const darkModeSystem = window?.matchMedia(
+  const darkModeSystem = window.matchMedia(
     '(prefers-color-scheme: dark)',
   ).matches;
 
-  const localStoragePreference = getLocalStorage('theme');
-  const systemPreference = darkModeSystem ? 'dark' : 'light';
-  const preference = 'light';
-
-  if (!localStoragePreference) {
-    setLocalStorage('theme', systemPreference);
-  }
+  const preference = darkModeSystem ? 'dark' : 'light';
 
   return preference === 'dark';
 };

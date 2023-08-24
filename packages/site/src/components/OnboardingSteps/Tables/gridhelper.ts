@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
-import { APICalls, predefinedRequests } from "../../../hooks/API/helpers";
+import { makeAPICall } from "../../../hooks/API/helpers";
+import { APICalls } from "../../../hooks/API/types";
 // Type of supported tokens from database record
-export type SupportedToken = {
+export interface SupportedToken {
   address: string;
   name: string;
   symbol: string;
@@ -11,29 +12,29 @@ export type SupportedToken = {
   token_image_url?: string;
   last_updated: Date;
   imageUrl?: string;
-};
+}
 
 // User's token balance object
-export type TokenBalance = {
+export interface TokenBalance {
   address: string;
   symbol: string;
   balance: number;
   price: number;
   totalValue: number;
   image?: string;
-};
+}
 
-export type SelectedNFTToken = {
+export interface SelectedNFTToken {
   address: string;
   tokenId: number;
-};
+}
 
 // User's NFT object
-export type NFTData = {
+export interface NFTData {
   name: string;
   id: number;
   imageUrl: string;
-  tokenId: number;
+  tokenId: string;
   collection: {
     id: number;
     name: string;
@@ -47,26 +48,6 @@ export type NFTData = {
     owner: string;
     assetContractType: string;
   };
-};
-
-export type DashboardView = {
-  symbol: string;
-  address: string;
-  price: number;
-  balance: number;
-  value: number;
-  valueProtected: number;
-  safeguards: any;
-  status: string;
-  image: string;
-};
-
-let provider;
-if (typeof window !== 'undefined' && window.ethereum) {
-  provider = new ethers.providers.Web3Provider(window.ethereum);
-} else {
-  // Handle case where MetaMask is not installed
-  console.error("Please install MetaMask or another Ethereum wallet extension");
 }
 
 // Fetches supported tokens from the API
@@ -74,14 +55,9 @@ export const fetchSupportedTokens = async (
   chainId: number,
   setSupportedTokens?: React.Dispatch<React.SetStateAction<SupportedToken[]>>
 ): Promise<SupportedToken[]> => {
-  try {
-    const { data } = await predefinedRequests(APICalls.GET_SUPPORTED_TOKENS, { chainId })
-    if (setSupportedTokens) setSupportedTokens(data);
-    return data;
-  } catch (error) {
-    console.error(`Error fetching supported tokens: ${error}`);
-    return [];
-  }
+  const { data } = await makeAPICall(APICalls.GET_SUPPORTED_TOKENS, { chainId })
+  if (setSupportedTokens) setSupportedTokens(data as SupportedToken[]);
+  return data;
 };
 
 // Fetches supported tokens from through RPC calls to get balances of supported tokens
@@ -90,7 +66,7 @@ export const fetchSupportedTokenBalances = async (
   setBalances?: React.Dispatch<React.SetStateAction<TokenBalance[]>>
 ): Promise<TokenBalance[]> => {
   try {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(window.ethereum as ethers.providers.ExternalProvider);
 
     // The ABI erc20 ABI for fetching token balances
     const tokenAbi = ["function balanceOf(address) view returns (uint256)"];
@@ -108,9 +84,9 @@ export const fetchSupportedTokenBalances = async (
         const balanceNumber = Number(
           ethers.utils.formatEther(balance.toString())
         );
-        const token = supportedTokens.find(
+        const token: SupportedToken = supportedTokens.find(
           (t) => t.address === contract.address
-        );
+        ) as SupportedToken;
         return {
           address: contract.address,
           symbol: token.symbol,
@@ -139,28 +115,4 @@ export const fetchSupportedTokensAndBalances = async (
   const supportedTokens = await fetchSupportedTokens(chainId);
   const balances = await fetchSupportedTokenBalances(supportedTokens);
   return { supportedTokens, balances };
-};
-
-// fetches all available token safeguards for a wallet address
-export const fetchTokenSafeguards = async (): Promise<any> => {
-  try {
-    const response = await fetch(
-      `${process.env.GATSBY_API_URL}/v0/getSafeguards`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      }
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch token safeguards`);
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`Error fetching setup safeguards: ${error}`);
-    return [];
-  }
 };

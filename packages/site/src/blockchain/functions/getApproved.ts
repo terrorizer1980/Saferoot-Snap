@@ -12,7 +12,7 @@ import { Address } from "wagmi";
 export const getApproved = (args: {
   tokenAddress: Address;
   tokenId: string;
-}) => {
+}): ReturnType<typeof useWagmiRead> => {
   const hook = useWagmiRead(args.tokenAddress, NFTABI, "getApproved", [
     args.tokenId,
   ]);

@@ -9,18 +9,18 @@ import {
 import { Typography } from "../../atoms/Typography";
 import { TextStyle } from "../../globalStyles";
 import { UserId } from "../../atoms/UserID";
-import { useNetwork, useWaitForTransaction } from "wagmi";
+import { Address, useNetwork, useWaitForTransaction } from "wagmi";
 import { useData } from "../../../../hooks/DataContext";
 import { SimpleButton } from "../../../SimpleButton";
-import { useContractInteraction } from "../../../../hooks/ContractInteractions/useContractInteraction";
 import { AssetGuards } from "../../../../hooks/Assets/useAssetGuards";
-import { HttpStatusCode } from "../../../../constants";
 import { ActionType } from "../../../../hooks/actions";
 import { TokenType } from "../../../../blockchain/enums";
 import { default as SaferootABI } from "../../../../blockchain/abi/SaferootABI.json";
 import { ethers } from "ethers";
 import { handleResponse } from "../SelectionModal";
-import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
+import { makeAPICall } from "../../../../hooks/API/helpers";
+import { APICalls } from "../../../../hooks/API/types";
+import { useWagmiWrite } from "../../../../blockchain/helpers/useWagmiWrite";
 
 
 export type ReviewData = {
@@ -32,6 +32,8 @@ export type ReviewData = {
 export interface ReviewContainerProps {
   assetGuards: AssetGuards
   onSuccess: () => void;
+  createSaferootWithSafeguardsTx: ReturnType<typeof useWagmiWrite>
+  addSafeguardTx: ReturnType<typeof useWagmiWrite>
 }
 
 // Review Container is the component that showcases everything on the approvals page. Add here for additional review info
@@ -42,10 +44,9 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
   } = useNetwork();
   const { state, dispatch } = useData();
   const { deployedSaferootAddress, userWallet, backupWallet } = state
-  const { assetGuards, onSuccess } = props;
+  const { assetGuards, onSuccess, createSaferootWithSafeguardsTx, addSafeguardTx } = props;
   const contractDeployAPI = useRef(false)
   const assetAPICalled = useRef([])
-  const { createSaferootWithSafeguardsTx, addSafeguardTx } = useContractInteraction(assetGuards)
 
   // Wait for transaction to be mined
   const res = useWaitForTransaction({
@@ -55,14 +56,14 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
   // save deployed contract address to context on success
   useEffect(() => {
     const saveDeployedContractAddress = async () => {
-      const { status } = await predefinedRequests(APICalls.CREATE_DEPLOYED_CONTRACT,
+      const { status } = await makeAPICall(APICalls.CREATE_DEPLOYED_CONTRACT,
         null,
         {
           chainId: chain.id,
           networkId: chain.id,
           contractAddress: res.data.logs[0].address,
-          userWalletAddress: userWallet
-        })
+          userWalletAddress: userWallet as Address
+        }, dispatch)
       handleResponse(status, dispatch, () => { });
     }
     if (res.isSuccess) {
@@ -133,14 +134,14 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
     }
     assetAPICalled.current.push(safeguardID);
     try {
-      const { status } = await predefinedRequests(APICalls.ADD_SAFEGUARD,
+      const { status } = await makeAPICall(APICalls.ADD_SAFEGUARD,
         null,
         {
           safeGuardId: safeguardID,
           networkId: chain.id,
           enabled: true,
           ceilingThresholds: createCeilingThresholds(safeguardID)
-        })
+        }, dispatch)
       handleResponse(status, dispatch, () => {
         dispatch({ type: ActionType.SET_ASSET_TO_EDIT, payload: null });
       });
@@ -172,15 +173,15 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
 
   }, []);
 
-  const deployContract = () => {
-    createSaferootWithSafeguardsTx.write?.()
-  }
-
-  const handleDeployContract = async () => {
+  const deployContract = async () => {
     await window.ethereum.request({
       method: 'wallet_invokeSnap',
       params: { snapId: 'local:http://localhost:8080', request: { method: 'deployContract' } },
     });
+    createSaferootWithSafeguardsTx.write?.()
+  }
+
+  const handleDeployContract = () => {
     if (deployedSaferootAddress) {
       addSafeguardTx.write?.()
     } else {

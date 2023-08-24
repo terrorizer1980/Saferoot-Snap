@@ -207,11 +207,11 @@ export const TableRow = (props: TableRowProps) => {
                             </div>
                             <div className="tokens_single_data_indiv_button">
                                 <SimpleButton
-                                    type={approveRes.isSuccess || data[cell.row.id].isApproved ? "default" : "primary"}
+                                    type={approveRes.isSuccess ? "default" : "primary"}
                                     onClick={() => {
                                         approveAssetTrigger.write?.()
                                     }}
-                                    disabled={approveRes.isLoading}>
+                                    disabled={approveRes.isLoading || data[cell.row.id].isApproved }>
                                     {getApprovalText()}
                                 </SimpleButton>
                             </div>

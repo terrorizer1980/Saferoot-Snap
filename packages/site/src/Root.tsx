@@ -1,6 +1,6 @@
 import { createContext, FunctionComponent, ReactNode, useState } from "react";
 import { ThemeProvider } from "styled-components";
-import { getThemePreference, setLocalStorage } from "./utils";
+import { getThemePreference } from "./utils";
 import { light } from "./config/theme";
 import "./rainbowkit/rainbowkit.css";
 import { AuthProvider } from "./hooks"; // Import the AuthProvider
@@ -19,7 +19,6 @@ export const Root: FunctionComponent<RootProps> = ({ children }) => {
   const [darkTheme, setDarkTheme] = useState(getThemePreference());
 
   const toggleTheme: ToggleTheme = () => {
-    setLocalStorage("theme", darkTheme ? "light" : "dark");
     setDarkTheme(!darkTheme);
   };
 

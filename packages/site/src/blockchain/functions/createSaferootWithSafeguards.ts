@@ -11,7 +11,7 @@ export interface createSaferootWithSafeguardsProps {
     safeguardEntries: SafeguardEntry[];
 }
 
-export const createSaferootWithSafeguards = (args: createSaferootWithSafeguardsProps) => {
+export const createSaferootWithSafeguards = (args: createSaferootWithSafeguardsProps): ReturnType<typeof useWagmiWrite> => {
     const hook = useWagmiWrite(
         GOERLI_FACTORY_ADDRESS,
         SaferootFactoryABI,

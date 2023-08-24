@@ -14,7 +14,6 @@ import {
   TokenSelectionPage,
   SafeguardSelectionPage,
   SuccessPage,
-  DeployContractPage
 } from '../components/OnboardingSteps';
 import WalletSwitchErrorPage from '../components/WalletSwitchErrorPage';
 import { navigate } from 'gatsby';
@@ -22,6 +21,7 @@ import "../styling/font.css";
 import { NAVIGATION_PATHS } from '../constants';
 import useAssetGuards from '../hooks/Assets/useAssetGuards';
 import DeployContractApproval from '../components/newComponents/organisms/DeployContractApproval';
+import { useContractInteraction } from '../hooks/ContractInteractions/useContractInteraction';
 
 const Onboarding = () => {
   const { state, dispatch } = useData();
@@ -60,6 +60,7 @@ const Onboarding = () => {
   }, [selectedTab]);
 
   const { assetGuards, setAssetGuards } = useAssetGuards()
+  const { createSaferootWithSafeguardsTx, addSafeguardTx } = useContractInteraction(assetGuards)
 
   return (
     <Container>
@@ -84,6 +85,8 @@ const Onboarding = () => {
             prevTab={() => setSelectedTab(Page.Safeguards)}
             nextTab={() => setSelectedTabAndMarkAsCompleted(Page.DeployContract, Page.BackupWallet)} /> : null}
           {selectedTab === Page.DeployContract && assetGuards ? <DeployContractApproval
+            createSaferootWithSafeguardsTx={createSaferootWithSafeguardsTx}
+            addSafeguardTx={addSafeguardTx}
             assetGuards={assetGuards}
             setAssetGuards={setAssetGuards}
             prevTab={() => setSelectedTab(Page.BackupWallet)}

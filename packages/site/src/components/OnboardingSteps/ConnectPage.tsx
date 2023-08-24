@@ -9,10 +9,12 @@ import { ActionType } from "../../hooks/actions";
 import { AuthContext } from "../../hooks";
 import { SnapsConnectButton } from "../Snaps";
 import { SimpleButton } from "../SimpleButton";
+import { MM_SNAPS_ENABLED } from "../../config/environmentVariable";
 import { HttpStatusCode, NAVIGATION_PATHS } from "../../constants";
 import { navigate } from "gatsby";
 import { Container } from "./styles";
-import { APICalls, predefinedRequests } from "../../hooks/API/helpers";
+import { makeAPICall } from "../../hooks/API/helpers";
+import { APICalls } from "../../hooks/API/types";
 
 const ConnectWalletImage = styled.img`
   padding-bottom: 80px;
@@ -47,7 +49,7 @@ export const ConnectPage = () => {
 
   const checkOnboarded = async () => {
     try {
-      const { data, status } = await predefinedRequests(APICalls.GET_DEPLOYED_CONTRACT)
+      const { data, status } = await makeAPICall(APICalls.GET_DEPLOYED_CONTRACT, null, null, dispatch)
       if (data.length > 0) {
         dispatch({ type: ActionType.SET_DEPLOYED_SAFEROOT_ADDRESS, payload: data[0].contract_address })
       } else {

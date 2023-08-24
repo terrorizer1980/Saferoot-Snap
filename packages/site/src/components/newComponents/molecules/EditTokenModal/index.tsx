@@ -20,7 +20,8 @@ import { ethtoWeiString } from "../../../../blockchain/helpers/ethtoWeiString";
 import { AssetGuard, AssetGuards, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
 import { SimpleButton } from "../../../SimpleButton";
 import { handleResponse } from "../SelectionModal";
-import { APICalls, predefinedRequests } from "../../../../hooks/API/helpers";
+import { makeAPICall } from "../../../../hooks/API/helpers";
+import { APICalls } from "../../../../hooks/API/types";
 import { HttpStatusCode } from "../../../../constants";
 
 export type EditTokenModalProps = {
@@ -47,21 +48,20 @@ export const EditTokenModal = (props: EditTokenModalProps) => {
 
   const editSafeguardAPI = async (address, safeGuardId, value) => {
     try {
-      const { status } = await predefinedRequests(APICalls.EDIT_TOKEN_SAFEGUARD,
+      const { status } = await makeAPICall(APICalls.EDIT_TOKEN_SAFEGUARD,
         {
           safeGuardId
         },
         {
           contractAddress: address,
           value_limit: ethtoWeiString(Number(value)),
-        })
+        }, dispatch)
       handleResponse(status, dispatch, () => {
         dispatch({ type: ActionType.SET_ASSET_TO_EDIT, payload: null });
         refetch();
         onClickClose();
       });
     } catch (error) {
-      console.log(error)
       dispatch({ type: ActionType.SET_LOADER, payload: { open: true, message: "Something went wrong on our end, please try again later." } })
     }
   };

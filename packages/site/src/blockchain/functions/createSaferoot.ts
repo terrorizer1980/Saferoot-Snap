@@ -5,7 +5,7 @@ import {
 import { useWagmiWrite } from "../helpers/useWagmiWrite";
 import { default as SaferootFactoryABI } from "../abi/SaferootFactoryABI.json";
 
-export const createSaferoot = (args: { backup: string }) => {
+export const createSaferoot = (args: { backup: string }): ReturnType<typeof useWagmiWrite> => {
   const hook = useWagmiWrite(
     GOERLI_FACTORY_ADDRESS,
     SaferootFactoryABI,

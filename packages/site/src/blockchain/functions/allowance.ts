@@ -6,7 +6,7 @@ export const allowance = (args: {
   userWalletAddress: Address;
   tokenAddress: Address;
   saferootAddress: Address;
-}) => {
+}): ReturnType<typeof useWagmiRead> => {
   const hook = useWagmiRead(args.tokenAddress, TokenABI, "allowance", [
     args.userWalletAddress,
     args.saferootAddress,

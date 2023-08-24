@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
-import { APICalls, predefinedRequests } from "./API/helpers";
+import { makeAPICall } from "./API/helpers";
+import { APICalls } from "./API/types";
 // Create a new context object
 export const AuthContext = createContext(null);
 
@@ -13,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
 
   const signOutHandler = async () => {
-    await predefinedRequests(APICalls.SIGN_OUT)
+    await makeAPICall(APICalls.SIGN_OUT)
     setAuthenticated(false);
   };
 

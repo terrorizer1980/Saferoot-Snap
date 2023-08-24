@@ -1,59 +1,29 @@
 import { useEffect, useState } from "react";
-import { APICalls, predefinedRequests } from "../API/helpers";
+import { makeAPICall } from "../API/helpers";
+import { APICalls } from "../API/types";
 import { NFTData, TokenBalance, fetchSupportedTokensAndBalances } from "../../components/OnboardingSteps/Tables/gridhelper";
 import { ethers } from "ethers";
-import { useNetwork } from "wagmi";
+import { Address, useNetwork } from "wagmi";
 import { default as ERC721ABI } from "../../blockchain/abi/ERC721NFTABI.json";
 import { default as ERC20ABI } from "../../blockchain/abi/ERC20TokensABI.json";
 
 import { useData } from "../DataContext";
 import { ETHEREUM_TOKEN_STANDARD, HttpStatusCode } from "../../constants";
+import { AssetGuards, AssetType, IdentificationConditions, PropertyReplacements, approvals, ERC20Safeguard, ERC721Safeguard, AssetGuard } from "./types";
 
-export interface AssetGuard {
-    asset: {
-        name: string;
-        image: string;
-    }
-    collection?: string;
-    tokenId?: string;
-    balance?: number;
-    security: string[];
-    status: {
-        isProtected: boolean;
-        time: string;
-    }
-    address: string;
-    safeguardID: string;
-    safeguards: {
-        type: string;
-        value?: string;
-        enabled?: boolean;
-    }[];
-    isPreGuarded: boolean;
-    isSelected: boolean;
-    isApproved: boolean;
-    allowance?: string;
-}
 
-export interface AssetGuards {
-    ERC20Assets: AssetGuard[];
-    ERC721Assets: AssetGuard[];
-}
-
-export interface approvals {
-    [key: string]: {
-        isApproved?: boolean;
-        allowance?: string;
-    };
-}
-
-export const updateAssetProperties = (setData, assetType, identificationConditions, propertyReplacements) => {
+export const updateAssetProperties = (
+    setData: React.Dispatch<React.SetStateAction<AssetGuards>>,
+    assetType: AssetType,
+    identificationConditions: IdentificationConditions,
+    propertyReplacements: PropertyReplacements
+): void => {
     setData((prev) => {
         return {
             ...prev,
             [assetType]: prev[assetType].map((asset) => {
                 let shouldUpdate = true;
-                for (let key in identificationConditions) {
+                for (const key in identificationConditions) {
                     if (asset[key] !== identificationConditions[key]) {
                         shouldUpdate = false;
                         break;
@@ -71,33 +41,39 @@ export const updateAssetProperties = (setData, assetType, identificationConditio
     });
 };
 
-const useAssetGuards = () => {
+interface UseAssetGuardsReturnType {
+    assetGuards: AssetGuards;
+    setAssetGuards: React.Dispatch<React.SetStateAction<AssetGuards>>;
+    refetch: () => Promise<void>;
+}
+
+const useAssetGuards = (): UseAssetGuardsReturnType => {
     const { chain } = useNetwork();
-    const { state } = useData();
+    const { state, dispatch } = useData();
 
     const [assetGuards, setAssetGuards] = useState<AssetGuards>({
         ERC20Assets: [],
         ERC721Assets: [],
     });
-    const [NFTDetails, setNFTDetails] = useState<NFTData[]>([]);
+    const [NFTDetails, setNFTDetails] = useState<NFTData[] | null>([]);
     const [approvals, setApprovals] = useState<approvals>({});
-    const [balances, setBalances] = useState<TokenBalance[]>([]);
+    const [balances, setBalances] = useState<TokenBalance[] | null>([]);
     const [safeguards, setSafeguards] = useState({
         ERC20Safeguards: [],
         ERC721Safeguards: [],
     })
 
-    const getSafegaurds = async () => {
-        const { data, status } = await predefinedRequests(APICalls.GET_SAFEGUARDS)
+    const getSafegaurds = async (): Promise<void> => {
+        const { data, status } = await makeAPICall(APICalls.GET_SAFEGUARDS, null, null, dispatch)
         if (status === HttpStatusCode.OK) {
-            setSafeguards(data)
+            setSafeguards(data as { ERC20Safeguards: never[]; ERC721Safeguards: never[]; })
         }
     }
 
-    const fetchAlchemyNFTs = async () => {
+    const fetchAlchemyNFTs = async (): Promise<void> => {
         try {
-            const { data: nftCollection } = await predefinedRequests(APICalls.GET_USER_NFTS, { userWallet: state.userWallet })
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const { data: nftCollection } = await makeAPICall(APICalls.GET_USER_NFTS, { userWallet: state.userWallet as Address }, null, dispatch)
+            const provider = new ethers.providers.Web3Provider(window.ethereum as ethers.providers.ExternalProvider);
             if (nftCollection?.ownedNfts?.length > 0) {
                 const assets = await Promise.all(nftCollection.ownedNfts.map(async (asset) => {
                     if (asset.contractMetadata.tokenType !== ETHEREUM_TOKEN_STANDARD.ERC721) return null;
@@ -142,12 +118,12 @@ const useAssetGuards = () => {
         }
     };
 
-    async function checkERC20Approvals(asset) {
+    const checkERC20Approvals = async (asset: ERC20Safeguard | ERC721Safeguard): Promise<string> => {
         try {
-            const { address: tokenAddress } = asset;
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const tokenContract = new ethers.Contract(tokenAddress, ERC20ABI, provider);
-            const allowance = await tokenContract.allowance(state.userWallet, state.deployedSaferootAddress);
+            const { address: tokenAddress } = asset as ERC20Safeguard;
+            const provider: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(window.ethereum as ethers.providers.ExternalProvider);
+            const tokenContract: ethers.Contract = new ethers.Contract(tokenAddress, ERC20ABI, provider);
+            const allowance: string = await tokenContract.allowance(state.userWallet, state.deployedSaferootAddress) as string;
             return allowance;
         } catch (error) {
             console.error('Failed to fetch allowance:', error);
@@ -155,12 +131,12 @@ const useAssetGuards = () => {
         }
     }
 
-    async function checkERC721Approvals(asset) {
+    const checkERC721Approvals = async (asset: ERC721Safeguard | ERC20Safeguard): Promise<string> => {
         try {
-            const { contract_address: nftAddress, token_id: tokenId } = asset;
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const nftContract = new ethers.Contract(nftAddress, ERC721ABI, provider);
-            const approvedAddress = await nftContract.getApproved(tokenId);
+            const { contract_address: nftAddress, token_id: tokenId } = asset as ERC721Safeguard;
+            const provider: ethers.providers.Web3Provider = new ethers.providers.Web3Provider(window.ethereum as ethers.providers.ExternalProvider);
+            const nftContract: ethers.Contract = new ethers.Contract(nftAddress, ERC721ABI, provider);
+            const approvedAddress: string = await nftContract.getApproved(tokenId) as string;
             return approvedAddress;
         } catch (error) {
             console.error('Failed to check approval:', error);
@@ -168,18 +144,18 @@ const useAssetGuards = () => {
         }
     }
 
-    const getBalances = async () => {
-        const fetchedBalances = await fetchSupportedTokensAndBalances(chain.id)
+    const getBalances = async (): Promise<void> => {
+        const fetchedBalances = await fetchSupportedTokensAndBalances(chain?.id as number)
         setBalances(fetchedBalances.balances)
     };
 
 
     useEffect(() => {
         if (safeguards) {
-            const checkAndSetApprovals = async (safeguard, checkFn) => {
+            const checkAndSetApprovals = async (safeguard: ERC20Safeguard | ERC721Safeguard, checkFn: (asset: ERC20Safeguard | ERC721Safeguard) => Promise<string>) => {
                 try {
                     const result = await checkFn(safeguard);
-                    if (safeguard.address) {
+                    if ('address' in safeguard) {
                         return {
                             [safeguard.address]: {
                                 isApproved: result.toString() !== '0',
@@ -199,13 +175,13 @@ const useAssetGuards = () => {
             };
 
             const approvalPromises = [
-                ...safeguards.ERC20Safeguards?.map(safeguard => checkAndSetApprovals(safeguard, checkERC20Approvals)),
-                ...safeguards.ERC721Safeguards?.map(safeguard => checkAndSetApprovals(safeguard, checkERC721Approvals))
+                ...safeguards.ERC20Safeguards.map(safeguard => checkAndSetApprovals(safeguard, checkERC20Approvals)),
+                ...safeguards.ERC721Safeguards.map(safeguard => checkAndSetApprovals(safeguard, checkERC721Approvals))
             ];
 
             Promise.all(approvalPromises)
                 .then(approvalResults => {
-                    const newApprovals = Object.assign({}, ...approvalResults);
+                    const newApprovals: approvals = Object.assign({}, ...approvalResults);
                     setApprovals(newApprovals);
                 });
         }
@@ -222,8 +198,8 @@ const useAssetGuards = () => {
             const { ERC20Safeguards, ERC721Safeguards } = safeguards;
             let newAssetGuards = { ...assetGuards };
 
-            const ERC20Assets = balances.map((ERC20Asset: any) => {
-                const ERC20Safeguard = ERC20Safeguards.find((safeguard: any) => safeguard.address === ERC20Asset.address);
+            const ERC20Assets = balances.map((ERC20Asset: TokenBalance) => {
+                const ERC20Safeguard = ERC20Safeguards.find((safeguard: ERC20Safeguard) => safeguard.address === ERC20Asset.address)
                 if (ERC20Asset.balance > 0) {
                     return {
                         asset: {
@@ -231,14 +207,14 @@ const useAssetGuards = () => {
                             image: "",
                         },
                         balance: ERC20Asset.balance,
-                        security: ERC20Safeguard && Number(ethers.utils.formatEther(ERC20Safeguard?.threshold_value)) > 0 ? ["Threshold Value: " + ethers.utils.formatEther(ERC20Safeguard?.threshold_value)] : [],
+                        security: ERC20Safeguard && Number(ethers.utils.formatEther((ERC20Safeguard as ERC20Safeguard).threshold_value)) > 0 ? ["Threshold Value: " + ethers.utils.formatEther((ERC20Safeguard as ERC20Safeguard).threshold_value)] : [],
                         status: {
-                            isProtected: ERC20Safeguard ? ERC20Safeguard?.threshold_value > 0 : false,
+                            isProtected: ERC20Safeguard && Number((ERC20Safeguard as ERC20Safeguard).threshold_value) > 0 ? true : false,
                             time: "",
                         },
                         address: ERC20Asset.address,
-                        safeguardID: ERC20Safeguard?.activation_hash || null,
-                        safeguards: ERC20Safeguard ? [{ type: "threshold", value: ERC20Safeguard?.threshold_value }] : [],
+                        safeguardID: ERC20Safeguard ? (ERC20Safeguard as ERC20Safeguard).activation_hash : null,
+                        safeguards: ERC20Safeguard ? [{ type: "threshold", value: (ERC20Safeguard as ERC20Safeguard)?.threshold_value }] : [],
                         isPreGuarded: !!ERC20Safeguard,
                         isSelected: false,
                         isApproved: ERC20Safeguard ? approvals[ERC20Asset.address]?.isApproved : false,
@@ -247,32 +223,32 @@ const useAssetGuards = () => {
                 }
             }).filter(Boolean);
 
-            const ERC721Assets = NFTDetails.map((ERC721Asset: any) => {
-                const ERC721Safeguard = ERC721Safeguards.find((safeguard: any) => (safeguard.contract_address === ERC721Asset.assetContract.address && safeguard.token_id === ERC721Asset.tokenId));
+            const ERC721Assets = NFTDetails.map((ERC721Asset: NFTData) => {
+                const ERC721Safeguard = ERC721Safeguards.find((safeguard: ERC721Safeguard) => (safeguard.contract_address === ERC721Asset.assetContract.address && safeguard.token_id === ERC721Asset.tokenId));
                 return {
                     asset: {
                         name: ERC721Asset.name + " #" + ERC721Asset.id,
                         image: ERC721Asset.imageUrl,
                     },
                     collection: ERC721Asset.collection.name,
-                    security: ERC721Safeguard?.enabled ? ["Lock"] : [],
+                    security: ERC721Safeguard && (ERC721Safeguard as ERC721Safeguard).enabled ? ["Lock"] : [],
                     status: {
-                        isProtected: ERC721Safeguard?.enabled,
+                        isProtected: ERC721Safeguard ? (ERC721Safeguard as ERC721Safeguard).enabled : false,
                         time: "",
                     },
                     address: ERC721Asset.assetContract.address,
-                    tokenId: ERC721Asset.id,
-                    safeguardID: ERC721Safeguard?.activation_hash || null,
-                    safeguards: ERC721Safeguard ? [{ type: "lock", enabled: ERC721Safeguard?.enabled }] : [],
+                    tokenId: ERC721Asset.id.toString(),
+                    safeguardID: ERC721Safeguard ? (ERC721Safeguard as ERC721Safeguard).activation_hash : null,
+                    safeguards: ERC721Safeguard ? [{ type: "lock", enabled: (ERC721Safeguard as ERC721Safeguard).enabled }] : [],
                     isPreGuarded: !!ERC721Safeguard,
                     isSelected: false,
-                    isApproved: ERC721Safeguard ? approvals[ERC721Safeguard?.contract_address]?.isApproved : false,
+                    isApproved: ERC721Safeguard ? approvals[(ERC721Safeguard as ERC721Safeguard).contract_address].isApproved : false,
                 }
             }).filter(Boolean)
 
             newAssetGuards = {
-                ERC20Assets: ERC20Assets,
-                ERC721Assets: ERC721Assets,
+                ERC20Assets: ERC20Assets as AssetGuard[],
+                ERC721Assets: ERC721Assets as AssetGuard[],
             };
 
             setAssetGuards(newAssetGuards);
@@ -282,7 +258,7 @@ const useAssetGuards = () => {
     return {
         assetGuards,
         setAssetGuards,
-        refetch: () => { getSafegaurds() },
+        refetch: async (): Promise<void> => { await getSafegaurds() },
     }
 };
 

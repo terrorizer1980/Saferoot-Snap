@@ -8,18 +8,17 @@ import {
   GenericWalletCardContainer,
 } from "../commonStyles";
 import { Typography } from "../../atoms/Typography";
-import { Color, TextStyle } from "../../globalStyles";
+import { TextStyle } from "../../globalStyles";
 import { ProgressBar } from "../../molecules/ProgressBar";
 import { StepDescription } from "../../molecules/StepDescription";
-import { Button } from "../../atoms/Button";
-import { ButtonTypes, totalReviewSteps } from "../../constants";
+import { totalReviewSteps } from "../../constants";
 import { ReviewContainer } from "../../molecules/ReviewContainer";
 import { ReviewTable } from "../../molecules/ReviewTable";
-import { ButtonContainer, TableContainer } from "./styles";
+import { TableContainer } from "./styles";
 import FixedNavigationBottomBar from "../../../FixedNavigationBottomBar";
 import { SimpleButton } from "../../../SimpleButton";
 
-const DeployContractApproval = ({ assetGuards, setAssetGuards, prevTab, nextTab }) => {
+const DeployContractApproval = ({ assetGuards, setAssetGuards, prevTab, nextTab, createSaferootWithSafeguardsTx, addSafeguardTx }) => {
 
   const [step, setStep] = useState<number>(1);
 
@@ -69,7 +68,11 @@ const DeployContractApproval = ({ assetGuards, setAssetGuards, prevTab, nextTab 
           />
           {step === 1 && (
             <div>
-              <ReviewContainer assetGuards={assetGuards} onSuccess={() => { setStep(2) }} />
+              <ReviewContainer
+                createSaferootWithSafeguardsTx={createSaferootWithSafeguardsTx}
+                addSafeguardTx={addSafeguardTx}
+                assetGuards={assetGuards}
+                onSuccess={() => { setStep(2) }} />
             </div>
           )}
         </div>
