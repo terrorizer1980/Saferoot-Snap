@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { Tag } from '../../atoms/Tag';
-import { AssetGuard, AssetGuards, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { AssetGuard, AssetGuards } from '../../../../hooks/Assets/types';
 import { AvatarId } from "../../atoms/AvatarId";
 import { SecurityInfo } from "../../atoms/SecurityInfo";
 import { Color, Spacing, TextStyle } from "../../globalStyles";
 import { EditTokenModal } from "../EditTokenModal";
 import { IDContainer } from "../TokensInfoTable/styles";
 import { Typography } from "@mui/material";
-import { SelectionButton } from "../../../SelectionButton";
 import { SelectionModal } from "../SelectionModal";
 import { ETHEREUM_TOKEN_STANDARD } from "../../../../constants";
 import { approve721 } from "../../../../blockchain/functions";
@@ -60,27 +60,16 @@ export const TableRow = (props: TableRowProps) => {
 
     }
 
-    const makeApproveRes = (hash) => {
-        return useWaitForTransaction({
-            hash: hash,
-            onSettled: (data, error) => {
-                if (!error) {
-
-                }
-                return data;
-            }
-        });
-    }
     const approveAssetTrigger = makeApproveAssetTrigger(data[row.id]);
-    const approveRes = makeApproveRes(approveAssetTrigger.data?.hash)
+    const { isLoading, isSuccess, isError } = useWaitForTransaction({ hash: approveAssetTrigger.data?.hash })
 
     const getApprovalText = () => {
         switch (true) {
-            case approveRes.isLoading:
+            case isLoading:
                 return "Approving...";
-            case approveRes.isSuccess:
+            case isSuccess:
                 return "Approved";
-            case approveRes.isError:
+            case isError:
                 return "Failed"
             default:
                 return "Approved";
@@ -88,10 +77,10 @@ export const TableRow = (props: TableRowProps) => {
     }
 
     useEffect(() => {
-        if (approveRes.isSuccess) {
+        if (isSuccess) {
             updateAssetProperties(setData, "ERC721Assets", { address: data[row.id]?.address, tokenId: data[row.id]?.tokenId }, { isApproved: true })
         }
-    }, [approveRes])
+    }, [isSuccess])
 
     return (
         <tr {...row.getRowProps()}>
@@ -176,12 +165,12 @@ export const TableRow = (props: TableRowProps) => {
                                 ) : null}
                             </div>
                             <div className="tokens_single_data_indiv_button">
-                            <SimpleButton
-                                    type={approveRes.isSuccess ? "default" : "primary"}
+                                <SimpleButton
+                                    type={isSuccess ? "default" : "primary"}
                                     onClick={() => {
                                         approveAssetTrigger.write?.()
                                     }}
-                                    disabled={approveRes.isLoading || data[cell.row.id].isApproved }>
+                                    disabled={isLoading || data[cell.row.id].isApproved}>
                                     {getApprovalText()}
                                 </SimpleButton>
                             </div>

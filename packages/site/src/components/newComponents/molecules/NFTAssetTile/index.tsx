@@ -13,7 +13,8 @@ import {
   NFTAssetTileSpreadContainer,
 } from "./styles";
 import { Checkbox } from "@mui/material";
-import { AssetGuard, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { AssetGuard } from "../../../../hooks/Assets/types";
 
 export type NFTAssetTileProps = {
   selectable?: boolean;

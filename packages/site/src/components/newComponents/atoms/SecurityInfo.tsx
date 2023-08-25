@@ -6,8 +6,7 @@ import {
 import { ButtonTypes, defaultTagIcon } from "../constants";
 import { Tag } from "./Tag";
 import { Button } from "./Button";
-import { NFTData, TokenData } from "../molecules/TableView";
-import { AssetGuard, AssetGuards } from "../../../hooks/Assets/useAssetGuards";
+import { AssetGuard } from "../../../hooks/Assets/types";
 
 export type SecurityInfoProps = {
   data?: AssetGuard;

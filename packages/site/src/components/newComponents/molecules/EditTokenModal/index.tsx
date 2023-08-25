@@ -1,5 +1,5 @@
 import { Modal } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   ActionButtons,
   ModalHeading,
@@ -9,7 +9,7 @@ import {
   SelectionButtonContainer,
 } from "./styles";
 import { Typography } from "../../atoms/Typography";
-import { Color, TextStyle } from "../../globalStyles";
+import { TextStyle } from "../../globalStyles";
 import { SafeguardCard } from "../SafeguardCard";
 import { CoinId } from "../../atoms/CoinId";
 import { AvatarId } from "../../atoms/AvatarId";
@@ -17,12 +17,12 @@ import { AssetTypes } from "../../constants";
 import { useData } from "../../../../hooks/DataContext";
 import { ActionType } from "../../../../hooks/actions";
 import { ethtoWeiString } from "../../../../blockchain/helpers/ethtoWeiString";
-import { AssetGuard, AssetGuards, updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { updateAssetProperties } from "../../../../hooks/Assets/useAssetGuards";
+import { AssetGuard, AssetGuards } from "../../../../hooks/Assets/types";
 import { SimpleButton } from "../../../SimpleButton";
 import { handleResponse } from "../SelectionModal";
 import { makeAPICall } from "../../../../hooks/API/helpers";
 import { APICalls } from "../../../../hooks/API/types";
-import { HttpStatusCode } from "../../../../constants";
 
 export type EditTokenModalProps = {
   type: string;

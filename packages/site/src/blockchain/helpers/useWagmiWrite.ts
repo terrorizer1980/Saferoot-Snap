@@ -30,9 +30,6 @@ export const useWagmiWrite = (
     abi: findFunctionAbi(abi, functionName),
     functionName: functionName,
     args: args,
-    onSettled(data, error) {
-      console.log("Settled", { data, error });
-    },
   });
   const writeContract = useContractWrite(config);
   return writeContract;
@@ -55,9 +52,6 @@ export const useWagmiRead = (
     abi: findFunctionAbi(abi, functionName),
     functionName: functionName,
     args: args,
-    onSettled(data, error) {
-      console.log("Settled", { data, error });
-    },
   });
   return readContract;
 };

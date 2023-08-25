@@ -82,13 +82,6 @@ export const useContractInteraction = ({ ERC20Assets, ERC721Assets }: UseContrac
 
     const approveRes = useWaitForTransaction({
         hash: checkValidState(ASSET_TYPE.TOKEN) ? approveERC20.data?.hash : approveERC721.data?.hash,
-        onSettled: (data, error) => {
-            if (!error) {
-                setAssetAddress(null);
-                setTokenId(null);
-            }
-            return data;
-        }
     });
 
     /*
