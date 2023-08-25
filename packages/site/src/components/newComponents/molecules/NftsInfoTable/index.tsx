@@ -1,20 +1,11 @@
 import React, { useMemo, useState } from "react";
 import "./styles.css";
 import { Typography } from "../../atoms/Typography";
-import { Color, Spacing, TextStyle } from "../../globalStyles";
+import { Spacing, TextStyle } from "../../globalStyles";
 import { useTable } from "react-table";
-import { AvatarId } from "../../atoms/AvatarId";
-import { Tag } from "../../atoms/Tag";
-import { NFTData } from "../TableView";
-import { SelectionButton } from "../../atoms/SelectionButton";
-import { SelectionModal } from "../SelectionModal";
-import { SecurityInfo } from "../../atoms/SecurityInfo";
-import { IDContainer, TableRootContainer } from "../TokensInfoTable/styles";
+import { TableRootContainer } from "../TokensInfoTable/styles";
 import { useData } from "../../../../hooks/DataContext";
-import { ActionType } from "../../../../hooks/actions";
-import { ASSET_TYPE, ETHEREUM_TOKEN_STANDARD } from "../../../../constants";
-import { EditTokenModal } from "../EditTokenModal";
-import { AssetGuard, AssetGuards } from "../../../../hooks/Assets/useAssetGuards";
+import { AssetGuard, AssetGuards } from "../../../../hooks/Assets/types";
 import { TableRow } from "./TableRow";
 
 export type NftsInfoTableProps = {

@@ -2,7 +2,7 @@ import React from 'react';
 import { SimpleButton } from '../SimpleButton';
 import SafeguardSetup from '../newComponents/organisms/SafeguardSetup';
 import FixedNavigationBottomBar from '../FixedNavigationBottomBar';
-import { AssetGuard, AssetGuards } from '../../hooks/Assets/useAssetGuards';
+import { AssetGuard, AssetGuards } from '../../hooks/Assets/types';
 import { ASSET_TYPE } from '../../constants';
 
 export interface SelectedAssetForSetup {
