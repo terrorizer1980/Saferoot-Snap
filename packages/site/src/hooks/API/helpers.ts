@@ -131,7 +131,6 @@ export const predefinedRequests = async <T extends APICalls>(
         credentials
       });
       data = (await req.json()).data;
-      console.log(data, '😈')
       status = req.status;
       return { data, status };
 
