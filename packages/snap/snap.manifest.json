@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
   "description": "A Saferoot Snap!",
-  "proposedName": "Saferoot",
+  "proposedName": "Saferoot Helper",
   "repository": {
     "type": "git",
     "url": "https://github.com/MetaMask/template-snap-monorepo.git"
   },
   "source": {
-    "shasum": "MLjRsoQBSJELwWuN3+Uuw6n4KWnZfVIqIJ48DfTxKWI=",
+    "shasum": "77r1w2+5HMUQOEeKbPiUONrvdTQY0c700+oprGdboNE=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
