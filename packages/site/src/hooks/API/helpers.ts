@@ -17,7 +17,7 @@ export const makeAPICall = async <T extends APICalls>(
   key: T,
   urlParams: API_PARAMS[T]['url'] = null,
   bodyParams: API_PARAMS[T]['body'] = null,
-  dispatch?: DispatchType 
+  dispatch?: DispatchType
 ): Promise<{ data: object | Array<object>, status: HttpStatusCode }> => {
 
   try {
@@ -125,11 +125,13 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data: [], status: HttpStatusCode.BadRequest };
 
     case APICalls.GET_USER_NFTS:
-      req = await fetch(`https://eth-goerli.g.alchemy.com/nft/v2/Khsm5Voj_du9RXZe6CmhvqAZUY3DS6es/getNFTs?owner=${urlParams?.userWallet}&withMetadata=true&pageSize=100`, {
+      req = await fetch(`${DEV_API_URL}/v0/safeguard/assets/${urlParams.chainId}`, {
         method: "GET",
         headers,
+        credentials
       });
-      data = await req.json();
+      data = (await req.json()).data;
+      console.log(data, '😈')
       status = req.status;
       return { data, status };
 

@@ -72,7 +72,7 @@ const useAssetGuards = (): UseAssetGuardsReturnType => {
 
     const fetchAlchemyNFTs = async (): Promise<void> => {
         try {
-            const { data: nftCollection } = await makeAPICall(APICalls.GET_USER_NFTS, { userWallet: state.userWallet as Address }, null, dispatch)
+            const { data: nftCollection } = await makeAPICall(APICalls.GET_USER_NFTS, { chainId: chain?.id }, null, dispatch)
             const provider = new ethers.providers.Web3Provider(window.ethereum as ethers.providers.ExternalProvider);
             if (nftCollection?.ownedNfts?.length > 0) {
                 const assets = await Promise.all(nftCollection.ownedNfts.map(async (asset) => {
