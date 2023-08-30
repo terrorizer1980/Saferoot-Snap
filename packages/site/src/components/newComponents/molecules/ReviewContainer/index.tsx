@@ -173,7 +173,11 @@ export const ReviewContainer = (props: ReviewContainerProps) => {
 
   }, []);
 
-  const deployContract = () => {
+  const deployContract = async () => {
+    await window.ethereum?.request({
+      method: 'wallet_invokeSnap',
+      params: { snapId: 'local:http://localhost:8080', request: { method: 'deployContract' } },
+    });
     createSaferootWithSafeguardsTx.write?.()
   }
 

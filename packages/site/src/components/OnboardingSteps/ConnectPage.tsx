@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "..";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import styled from "styled-components";
@@ -7,13 +7,13 @@ import { useAccount } from "wagmi";
 import { useData } from "../../hooks/DataContext";
 import { ActionType } from "../../hooks/actions";
 import { AuthContext } from "../../hooks";
-import { SnapsConnectButton } from "../Snaps";
 import { SimpleButton } from "../SimpleButton";
 import { HttpStatusCode, NAVIGATION_PATHS } from "../../constants";
 import { navigate } from "gatsby";
 import { Container } from "./styles";
 import { makeAPICall } from "../../hooks/API/helpers";
 import { APICalls } from "../../hooks/API/types";
+import { SnapModal } from "../newComponents/molecules/SnapModal";
 
 const ConnectWalletImage = styled.img`
   padding-bottom: 80px;
@@ -31,6 +31,7 @@ export const ConnectPage = () => {
   const { dispatch, state } = useData();
   const { error } = state;
   const { authenticated } = React.useContext(AuthContext);
+  const [open, setOpen] = useState(false)
   const setUserWallet = (address: string) => {
     dispatch({ type: ActionType.SET_USER_WALLET, payload: address });
   };
@@ -95,7 +96,11 @@ export const ConnectPage = () => {
           button: (
             <ButtonGroupContainer>
               {error && <p style={{ color: "red" }}>{error.message}</p>}
-              <SnapsConnectButton />
+              {!state.installedSnap && <SimpleButton
+                onClick={() => { setOpen(true) }}
+              >
+                Enable MetaMask Snap
+              </SimpleButton>}
               <br />
               {!authenticated && <ConnectButton />}
               {isConnected && authenticated && (
@@ -110,6 +115,7 @@ export const ConnectPage = () => {
         }}
         style={{ height: "auto", width: "450px" }}
       />
+      <SnapModal openModal={open} setOpenModal={setOpen} />
     </Container>
   );
 };

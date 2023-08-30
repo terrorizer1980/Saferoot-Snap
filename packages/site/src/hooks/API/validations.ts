@@ -43,7 +43,7 @@ export const schemas = {
     getUserNFTs: Joi.object({
         body: isNull,
         url: Joi.object({
-            userWallet: Joi.string().pattern(regexes.contractAddress).required(),
+            chainId: isNumber,
         }),
     }),
     addSafeguard: Joi.object({

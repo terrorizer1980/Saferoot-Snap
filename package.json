@@ -1,17 +1,16 @@
 {
-  "name": "@metamask/template-snap-monorepo",
-  "version": "0.1.0",
-  "private": true,
-  "description": "",
-  "homepage": "https://github.com/MetaMask/template-snap-monorepo#readme",
+  "name": "saferoot-metamask",
+  "version": "1.0.0",
+  "description": "Safeguard your crypto and NFTs",
+  "homepage": "https://github.com/Staging-Labs/Saferoot-Snap#readme",
   "bugs": {
-    "url": "https://github.com/MetaMask/template-snap-monorepo/issues"
+    "url": "https://github.com/Staging-Labs/Saferoot-Snap/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MetaMask/template-snap-monorepo.git"
+    "url": "git+https://github.com/Staging-Labs/Saferoot-Snap.git"
   },
-  "license": "(MIT-0 OR Apache-2.0)",
+  "license": "MIT-0",
   "author": "",
   "workspaces": [
     "packages/*"
@@ -45,7 +44,7 @@
   },
   "packageManager": "yarn@3.2.1",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "jest": {
     "testEnvironment": "jsdom"
