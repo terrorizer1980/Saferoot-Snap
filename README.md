@@ -1,7 +1,7 @@
 
 ## Introducing Saferoot: Safeguard your crypto and NFTs
 
-[Saferoot](https://www.saferoot.io/) is pioneering **threat mitigation layer** & is designed for enterprises, providing **real-time protection** for vulnerable digital assets. Our non-custodial solution intercepts dangerous transactions before they're committed on-chain, redirecting pre-authorized assets to a secure **safety wallet.**
+[Saferoot](https://www.saferoot.io/) is a pioneering **threat mitigation layer**, providing **real-time protection** for vulnerable digital assets. Our non-custodial solution intercepts dangerous transactions before being committed on-chain, redirecting pre-authorized assets to a secure **backup wallet.**
 
 ### Why Choose Saferoot?
 

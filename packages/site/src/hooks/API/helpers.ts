@@ -6,7 +6,7 @@ import { schemas, ERC20SafeguardSchema, ERC721SafeguardSchema, supportedTokensSc
 
 type DispatchType = React.Dispatch<Action>
 
-const DEV_API_URL = "http://localhost:5433"
+const API_URL = "https://api.saferoot.io/dev"
 
 interface ValidateParamsType<T extends APICalls> {
   body: API_PARAMS[T]['body'] | null;
@@ -58,7 +58,7 @@ export const predefinedRequests = async <T extends APICalls>(
     // Auth
 
     case APICalls.NONCE:
-      req = await fetch(`${DEV_API_URL}/nonce`, {
+      req = await fetch(`${API_URL}/nonce`, {
         method: "GET",
         credentials,
       });
@@ -67,7 +67,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.VERIFY:
-      req = await fetch(`${DEV_API_URL}/verify`, {
+      req = await fetch(`${API_URL}/verify`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
@@ -78,7 +78,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.SIGN_OUT:
-      req = await fetch(`${DEV_API_URL}/signout`, {
+      req = await fetch(`${API_URL}/signout`, {
         method: "POST",
         headers,
         credentials,
@@ -90,7 +90,7 @@ export const predefinedRequests = async <T extends APICalls>(
     // User Deployed Contracts
 
     case APICalls.CREATE_DEPLOYED_CONTRACT:
-      req = await fetch(`${DEV_API_URL}/v0/settings/contract`, {
+      req = await fetch(`${API_URL}/v0/settings/contract`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
@@ -101,7 +101,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.GET_DEPLOYED_CONTRACT:
-      req = await fetch(`${DEV_API_URL}/v0/settings/contract`, {
+      req = await fetch(`${API_URL}/v0/settings/contract`, {
         method: "GET",
         headers,
         credentials,
@@ -113,7 +113,7 @@ export const predefinedRequests = async <T extends APICalls>(
     // Assets
 
     case APICalls.GET_SUPPORTED_TOKENS:
-      req = await fetch(`${DEV_API_URL}/ethereum/v0/${urlParams.chainId}/supported_token`, {
+      req = await fetch(`${API_URL}/ethereum/v0/${urlParams.chainId}/supported_token`, {
         method: "GET",
         headers,
       });
@@ -125,7 +125,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data: [], status: HttpStatusCode.BadRequest };
 
     case APICalls.GET_USER_NFTS:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard/assets/${urlParams.chainId}`, {
+      req = await fetch(`${API_URL}/v0/safeguard/assets/${urlParams.chainId}`, {
         method: "GET",
         headers,
         credentials
@@ -137,7 +137,7 @@ export const predefinedRequests = async <T extends APICalls>(
     // Safeguards
 
     case APICalls.GET_SAFEGUARDS:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard`, {
+      req = await fetch(`${API_URL}/v0/safeguard`, {
         method: "GET",
         headers,
         credentials,
@@ -150,7 +150,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data: {}, status: HttpStatusCode.BadRequest };
 
     case APICalls.ADD_SAFEGUARD:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard/value_guard?blockchain=ethereum&network=goerli`, {
+      req = await fetch(`${API_URL}/v0/safeguard/value_guard?blockchain=ethereum&network=goerli`, {
         method: "POST",
         body: JSON.stringify(bodyParams),
         headers,
@@ -161,7 +161,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.EDIT_TOKEN_SAFEGUARD:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
+      req = await fetch(`${API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
         method: "PUT",
         body: JSON.stringify(bodyParams),
         headers,
@@ -172,7 +172,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.TOGGLE_NFT_SAFEGUARD:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC721`, {
+      req = await fetch(`${API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC721`, {
         method: "DELETE",
         body: JSON.stringify(bodyParams),
         headers,
@@ -183,7 +183,7 @@ export const predefinedRequests = async <T extends APICalls>(
       return { data, status };
 
     case APICalls.TOGGLE_TOKEN_SAFEGUARD:
-      req = await fetch(`${DEV_API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
+      req = await fetch(`${API_URL}/v0/safeguard/${urlParams.safeGuardId}/ERC20`, {
         method: "DELETE",
         body: JSON.stringify(bodyParams),
         headers,
