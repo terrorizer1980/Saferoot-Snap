@@ -1,13 +1,11 @@
 import { Modal } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import {
   ActionButtons,
   ModalHeading,
   SelectionButtonContainer,
   SelectionModalRoot,
-} from "./styles";
-import { SelectionButton } from "../../atoms/SelectionButton";
-import "./styles.css";
+} from "../SelectionModal/styles"
 import { Button } from "../../atoms/Button";
 import { Typography } from "../../atoms/Typography";
 import { Color, TextStyle } from "../../globalStyles";

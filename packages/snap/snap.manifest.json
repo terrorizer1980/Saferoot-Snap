@@ -7,12 +7,12 @@
     "url": "https://github.com/Staging-Labs/Saferoot-Snap.git"
   },
   "source": {
-    "shasum": "0DxpgRoy9/2gpZA42+I6UVtu+bmn3ENgJtkdIIsLcWc=",
+    "shasum": "GrnoSXYQtPdtlA51kR7jW1h7MFsbBUP0o06160qXhq0=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "saferoot-metamask",
+        "packageName": "saferoot-metamask-helper",
         "registry": "https://registry.npmjs.org/"
       }
     }
