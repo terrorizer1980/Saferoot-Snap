@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "description": "A Saferoot Snap!",
+  "description": "Safeguard your crypto and NFTs",
   "proposedName": "Saferoot Helper",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "saferoot-metamask-helper",
+        "packageName": "saferoot-metamask-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

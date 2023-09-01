@@ -1,7 +1,6 @@
 {
-  "name": "saferoot-metamask-helper",
-  "version": "1.0.0",
-  "private": true,
+  "name": "saferoot-metamask-snap",
+  "version": "1.0.1",
   "description": "Safeguard your crypto and NFTs",
   "repository": {
     "type": "git",
