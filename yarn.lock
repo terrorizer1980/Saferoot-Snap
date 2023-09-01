@@ -24698,9 +24698,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"saferoot-metamask-helper@workspace:packages/snap":
+"saferoot-metamask-snap@workspace:packages/snap":
   version: 0.0.0-use.local
-  resolution: "saferoot-metamask-helper@workspace:packages/snap"
+  resolution: "saferoot-metamask-snap@workspace:packages/snap"
   dependencies:
     "@lavamoat/allow-scripts": ^2.0.3
     "@metamask/auto-changelog": ^2.6.0
